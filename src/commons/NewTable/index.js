@@ -1,0 +1,302 @@
+import React, {useEffect, useState} from 'react'
+import styled from 'styled-components'
+import { useTable, useFilters, useSortBy, usePagination, useGlobalFilter } from 'react-table'
+import cookie from 'utils/cookie'
+import { isLogin, customFetch } from 'utils'
+import matchSorter from 'match-sorter'
+
+
+const Styles = styled.div`
+		padding: 0px !important;
+		margin-top: 0;
+		table {
+			border-spacing: 0;
+			width: 100%;
+			border-spacing: 0;
+			padding: 0px !important;
+			thead:nth-child(1){
+				border: 1px solid blue;
+				tr:nth-child(1){
+					display: none
+				}
+				tr:nth-child(3){
+					display: none
+				}
+			}
+			tr {
+				:first-child{
+					border: 1px solid red;
+				}
+				:last-child {
+					td {
+						border-bottom: 0;
+					}
+				}
+			}
+			th{
+				background: #F5F6FA
+				text-align: left
+				padding: 20px 10px;
+				color: #A3A6B4;
+			},
+			td {
+				margin: 1;
+				padding: 20px 10px;
+				border-bottom: 1px solid #dedede;
+				text-align: left;
+				:last-child {
+					border-right: 0;
+				}
+			}
+			input, select{
+			width: 100%;
+			padding: 10px 10px;
+			margin-bottom: 20px;
+			border: none;
+			border-radius: 5px;
+				::placeholder {
+					color: #A3A6B4;
+					opacity: 1;
+				}
+			}
+			select{
+				height: 40px;
+				background: white;
+			}
+		}
+
+		.pagination{
+			display: block;
+			width: 100%
+			text-align: center;
+			margin-top: 40px;
+			button{
+				border: none;
+				width: 25px;
+				height: 100%;
+				.fa{
+					font-size: 16px;
+					cursor: pointer
+				}
+				&:focus{
+					color: red;
+					border: none;
+				}
+			}
+			input{
+				border: 1px solid #f0f0f7;
+				padding: 10px 10px;
+				border-radius: 5px;
+				height: 40px;
+				background: white;
+			}
+			select{
+				border: 1px solid #f0f0f7;
+				width: 20%;
+				padding: 10px 10px;
+				border-radius: 5px;
+				height: 40px;
+				background: white;
+				width: 80px;
+			}
+			.first, .second, .third{
+				display: inline-block;
+				width: 250px;
+				padding: 10px;
+				height: 40px;
+				vertical-align: middle;
+				display: inline-flex;
+				flex-direction: row;
+				align-items: center;
+				justify-content: center;
+			}
+			.second{
+				border-left: 0.11em solid #dedede;
+				border-right: 0.11em solid #dedede;
+			}
+		}
+	`,
+	Container = styled.div`
+		width: 100%;
+	`
+
+// Let's add a fetchData method to our Table component that will be used to fetch
+// new data when pagination state changes
+// We can also add a loading state to let our table know it's loading new data
+export default function Table({
+	columns,
+	data,
+	fetchData,
+	loading,
+	filters,
+	handleOnInputChange,
+	pageCount: controlledPageCount,
+}) {
+
+	console.log(filters)
+	const {
+		getTableProps,
+		getTableBodyProps,
+		headerGroups,
+		prepareRow,
+		page,
+		canPreviousPage,
+		canNextPage,
+		pageOptions,
+		pageCount,
+		gotoPage,
+		nextPage,
+		previousPage,
+		setPageSize,
+		state,
+		flatColumns,
+		// Get the state from the instance
+		state: { pageIndex, pageSize },
+	} = useTable(
+		{
+			columns,
+			data,
+			initialState: { pageIndex: 0 }, // Pass our hoisted table state
+			manualPagination: true, // Tell the usePagination
+			// hook that we'll handle our own data fetching
+			// This means we'll also have to provide our own
+			// pageCount.
+			pageCount: controlledPageCount,
+		},
+		useSortBy,
+		usePagination
+	)
+
+	// Listen for changes in pagination and use the state to fetch our new data
+	useEffect(() => {
+		fetchData({ pageIndex, pageSize, state })
+	}, [fetchData, pageIndex, pageSize])
+
+
+	// Render the UI for your table
+	return (
+		<>
+			<pre>
+				<code>
+					{JSON.stringify(
+						{
+							pageIndex,
+							pageSize,
+							pageCount,
+							canNextPage,
+							canPreviousPage,
+							state						},
+						null,
+						2
+					)}
+				</code>
+			</pre>
+			<Styles>
+
+			<table {...getTableProps()}>
+				<thead>
+					{headerGroups.map(headerGroup => (
+						<tr {...headerGroup.getHeaderGroupProps()}>
+							{headerGroup.headers.map(column => (
+								<th {...column.getHeaderProps()}>
+									{column.render('Header')}
+									{/* Render the columns filter UI */}
+									{column.Filter && <input
+										type="text"
+										value={filters[column.id] || ''}
+										id="search-input"
+										placeholder="Search..."
+										onChange={e => {
+											handleOnInputChange(pageSize, pageIndex, state, e.target.value, column.id)
+										}}
+									/>}
+								</th>
+							))}
+						</tr>
+					))}
+					<tr>
+						<th
+							colSpan={flatColumns.length}
+							style={{
+								textAlign: 'left',
+							}}
+						>
+						</th>
+					</tr>
+				</thead>
+				<tbody {...getTableBodyProps()}>
+					{page.map((row, i) => {
+						prepareRow(row)
+						return (
+							<tr {...row.getRowProps()}>
+								{row.cells.map(cell => {
+									return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+								})}
+							</tr>
+						)
+					})}
+					<tr>
+						{loading ? (
+							// Use our custom loading state to show a loading indicator
+							<td colSpan="10000">Loading...</td>
+						) : (
+								<td colSpan="10000">
+									Showing {page.length} of ~{controlledPageCount * pageSize}{' '}
+									results
+              </td>
+							)}
+					</tr>
+				</tbody>
+			</table>
+			</Styles>
+			{/*
+        Pagination can be built however you'd like.
+        This is just a very basic UI implementation:
+      */}
+			<div className="pagination">
+				<button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+					{'<<'}
+				</button>{' '}
+				<button onClick={() => previousPage()} disabled={!canPreviousPage}>
+					{'<'}
+				</button>{' '}
+				<button onClick={() => nextPage()} disabled={!canNextPage}>
+					{'>'}
+				</button>{' '}
+				<button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+					{'>>'}
+				</button>{' '}
+				<span>
+					Page{' '}
+					<strong>
+						{pageIndex + 1} of {pageOptions.length}
+					</strong>{' '}
+				</span>
+				<span>
+					| Go to page:{' '}
+					<input
+						type="number"
+						defaultValue={pageIndex + 1}
+						onChange={e => {
+							const page = e.target.value ? Number(e.target.value) - 1 : 0
+							gotoPage(page)
+						}}
+						style={{ width: '100px' }}
+					/>
+				</span>{' '}
+				<select
+					value={pageSize}
+					onChange={e => {
+						setPageSize(Number(e.target.value))
+					}}
+				>
+					{[10, 20, 30, 40, 50].map(pageSize => (
+						<option key={pageSize} value={pageSize}>
+							Show {pageSize}
+						</option>
+					))}
+				</select>
+			</div>
+		</>
+	)
+}
