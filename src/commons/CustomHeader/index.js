@@ -1,8 +1,9 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import PropTypes from 'prop-types'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
 import cookie from 'utils/cookie'
+import { UserContext } from 'contexts/UserContext'
 
 import Dropdown from 'commons/Dropdown'
 import Logo from 'assets/images/logo.png'
@@ -22,14 +23,17 @@ import {
 
 
 const CustomHeader = ({history}) => {
+	const { currentUser } = useContext(UserContext)
+
 	const logoutActions = (history) => {
 		cookie.clearAll()
 		history.push('/auth')
 	}
-	console.log(history)
+
 	return (
 		<HeaderContainer>
 			<Header>
+				<Name>{currentUser.email}</Name>
 				<Dropdown
 					history={history}
 					target={() => (
@@ -65,6 +69,8 @@ const HeaderContainer = styled.div `
 	`,
 	Name=styled.div`
 		font-size: 14px;
+		display: flex;
+    align-items: center;
 	`,
 	Logout=styled.div`
 		color: red;

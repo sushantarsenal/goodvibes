@@ -1,14 +1,20 @@
 import React from 'react';
 import styled from 'styled-components'
 import theme from 'constants/theme'
+import Button from 'commons/Buttons'
+import { NavLink } from 'react-router-dom'
 
-const Breadcrumb = ({name, createNew}) => {
+const Breadcrumb = ({name, createNew, path, title}) => {
 	return (
 		<>
 			{ (name || createNew) &&
 				<Container>
 					<ActualBreadcrumb>{name}</ActualBreadcrumb>
-					<RightSettings></RightSettings>
+					{createNew && <RightSettings>
+							<CustomButton primary type="submit" disabled={false} style={{ marginRight: 10 }}>
+								<Link to={path}>{title}</Link>
+							</CustomButton>
+						</RightSettings>}
 				</Container>
 			}
 		</>
@@ -33,6 +39,13 @@ const Container = styled.div`
 	`,
 	RightSettings = styled.div`
 		display: flex;
-	`
+	`,
+	CustomButton = styled(Button.Content)`
+    text-transform: uppercase;
+    height: 40px;
+	`,
+	Link = styled(NavLink)`
+    color: #fff
+  `
 
 export default Breadcrumb

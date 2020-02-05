@@ -19,6 +19,8 @@ import Subscriptions from '../../components/Subscriptions'
 import Slider from '../../components/Slider'
 import Settings from '../../components/Settings'
 
+import CustomersForm from '../Customers/Form'
+
 
 function App({ history }) {
   return (
@@ -39,6 +41,11 @@ function App({ history }) {
           from='/'
           to={DASHBOARD}
         />
+        <Route exact path={CUSTOMERS.NEW} component={CustomersForm} />
+        <Route exact path={TRACKS.NEW} component={CustomersForm} />
+        <Route exact path={CATEGORIES.NEW} component={CustomersForm} />
+        <Route exact path={GENRES.NEW} component={CustomersForm} />
+        <Route exact path={SUBSCRIPTIONS.NEW} component={CustomersForm} />
         <PrivateRoute path={DASHBOARD} component={Dashboard} />
         <PrivateRoute path={CUSTOMERS.INDEX} component={Customers} />
         <PrivateRoute path={EMAIL_MARKETINGS.INDEX} component={EmailMarketings} />

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useContext } from 'react'
+import React, { useState, useMemo, useEffect, useContext, useCallback, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
@@ -11,14 +11,25 @@ import Sidebar, { RouteWithSidebar } from 'commons/Sidebar'
 import CustomHeader from 'commons/CustomHeader'
 import Gist from 'commons/Style/Gist'
 import Breadcrumb from 'commons/Style/Breadcrumb'
-import Table from 'commons/NewTable'
+import NewTable from 'commons/NewTable'
 import { UserContext } from 'contexts/UserContext'
 import SelectFilter from '../commons/Filter/SelectColumnFilter'
 
 const Tracks = ({ history }) => {
-	const [loading, updateLoading] = useState(true)
-	const [data, setData] = useState([])
 	const { currentUser } = useContext(UserContext)
+	const [data, setData] = useState([])
+	const [loading, setLoading] = useState(false)
+	const [pageCount, setPageCount] = useState(0)
+	const [filters, setFilters] = useState({})
+	const [total, setTotal] = useState(0)
+
+	const optionsLinks = () => {
+		return (<>
+			<span>Edit</span>
+			<span> | </span>
+			<span>Delete</span>
+		</>)
+	}
 
 	const columns = useMemo(
 		() => [
@@ -27,7 +38,9 @@ const Tracks = ({ history }) => {
 				columns: [
 					{
 						Header: "Title",
-						accessor: "name"
+						accessor: "name",
+						Filter: true,
+						type: 'text'
 					},
 					{
 						Header: "Play Count",
@@ -44,7 +57,8 @@ const Tracks = ({ history }) => {
 					{
 						Header: "Options",
 						accessor: "",
-						Filter: false
+						type: 'options',
+						Options: optionsLinks
 					}
 				]
 			}
@@ -52,31 +66,56 @@ const Tracks = ({ history }) => {
 		[]
 	);
 
-	const fetchTracks = async () => {
-		const token = cookie.getToken()
-		const fetchData = async () => {
-			const [response, headers] = await customFetch('v1/tracks', 'GET', {}, { Authorization: `Bearer ${token}` })
-			setData(response)
-		};
-		await fetchData();
-		updateLoading(false)
-	}
+	const handleOnInputChange = async (pageSize, pageIndex, state, value, column) => {
+		await setFilters(prevState => ({ ...prevState, [column]: value }))
+		const hotFilters = filters
+		hotFilters[column] = value
+		console.log(hotFilters)
+		fetchData({ pageSize, pageIndex, state, hotFilters })
+	};
+
+	const token = cookie.getToken()
+	const fetchTracks = async ({ pageSize, pageIndex, state, hotFilters }) => {
+		try {
+			setLoading(true)
+			const [response, headers] = await customFetch('v1/tracks', 'GET', { per_page: 20, page: pageIndex+1, filters: hotFilters || '' }, { Authorization: `Bearer ${token}` })
+			setData(response.tracks);
+			setTotal(response.total);
+			setLoading(false)
+			setPageCount(response.pages)
+		} catch (e) {
+			console.log(e);
+		}
+	};
 
 	useEffect(() => {
-		fetchTracks()
-		// updateLoadingState(false)
-	}, [history.location.pathname])
+		//fetchCustomers();
+	}, [])
 
-	// if (loading) return <div>Loading...</div>
+	const fetchData = useCallback(({ pageSize, pageIndex, state, hotFilters }) => {
+		fetchTracks({ pageSize, pageIndex, state, hotFilters });
+	}, [])
+
+
+	//if (loading) return <div>Loading...</div>
 	return (
 		<Container>
 			<Sidebar items={getSidebarItems()} history={history} />
 
 			<RouteWithSidebar>
 				<CustomHeader currentUser={currentUser} history={history} />
-				<Breadcrumb name='Tracks' createNew={false} />
+				<Breadcrumb name='Tracks' createNew={true} path={`/tracks/new`} title='Add New Tracks' />
 				<Gist>
-					<Table columns={columns} data={data} />
+					<NewTable
+						columns={columns}
+						data={data || []}
+						fetchData={fetchData}
+						loading={loading}
+						pageCount={pageCount}
+						filters={filters}
+						total={total}
+						handleOnInputChange={handleOnInputChange}
+					/>
 				</Gist>
 			</RouteWithSidebar>
 		</Container>

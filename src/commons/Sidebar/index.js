@@ -1,16 +1,10 @@
-/* Copyright (C) Go9, Inc - All Rights Reserved
-* Unauthorized copying of this file, via any medium is strictly prohibited
-* Proprietary and confidential
-* Bryan Starbuck <bryan@go9.com>, October 2019
-*/
 import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { get } from 'lodash'
 import { NavLink } from 'react-router-dom'
 import theme from 'constants/theme'
-import { PICK_TO_EARN_MORE } from 'constants/routes'
-import logo from 'assets/images/logo.png'
+import { UserContext } from 'contexts/UserContext'
 
 const Container = styled.div`
     background-color: ${theme.color.sidebar.background};
@@ -108,6 +102,8 @@ export const RouteWithSidebar = styled.div`
 `
 
 const Sidebar = ({ items, history, isSettingsPage }) => {
+  const { currentUser } = useContext(UserContext)
+
   return (
     <>
       <Container>

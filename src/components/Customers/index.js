@@ -14,16 +14,26 @@ import Breadcrumb from 'commons/Style/Breadcrumb'
 import NewTable from 'commons/NewTable'
 import { UserContext } from 'contexts/UserContext'
 import SelectFilter from '../commons/Filter/SelectColumnFilter'
+
+import { CUSTOMERS } from 'constants/routes'
+
 import {isEmpty} from 'lodash'
 
 const Customers = ({ history }) => {
 	const {currentUser} = useContext(UserContext)
-
 	const [data, setData] = useState([])
 	const [loading, setLoading] = useState(false)
 	const [pageCount, setPageCount] = useState(0)
-	const fetchIdRef = useRef(0)
 	const [filters, setFilters] = useState({})
+	const [total, setTotal] = useState(0)
+
+	const optionsLinks = () => {
+		return (<>
+			<span>Edit</span>
+			<span> | </span>
+			<span>Delete</span>
+		</>)
+	}
 
 	const columns = useMemo(
 		() => [
@@ -31,11 +41,10 @@ const Customers = ({ history }) => {
 				Header: "Customers",
 				columns: [
 					{
-						Header: "Customer's Name",
+						Header: "Email",
 						accessor: "email",
 						Filter: true,
 						type: 'text'
-
 					},
 					{
 						Header: "Created Date",
@@ -55,7 +64,8 @@ const Customers = ({ history }) => {
 					{
 						Header: "Options",
 						accessor: "",
-						Filter: false
+						type: 'options',
+						Options: optionsLinks
 					}
 				]
 			}
@@ -63,17 +73,21 @@ const Customers = ({ history }) => {
 		[]
 	);
 
-	const handleOnInputChange = (pageSize, pageIndex, state, value, column) => {
-		setFilters(prevState => ({ ...prevState, [column]: value }))
+	const handleOnInputChange = async (pageSize, pageIndex, state, value, column) => {
+		await setFilters(prevState => ({ ...prevState, [column]: value }))
+		const hotFilters = filters
+		hotFilters[column] = value
+		console.log(hotFilters)
+		fetchData({ pageSize, pageIndex, state, hotFilters})
 	};
 
 	const token = cookie.getToken()
-	const fetchCustomers = async ({ pageSize, pageIndex, state }) => {
+	const fetchCustomers = async ({ pageSize, pageIndex, state, hotFilters }) => {
 		try {
 			setLoading(true)
-			const [response, headers] = await customFetch('v1/users', 'GET', {per_page: 5, page: pageIndex, filters: filters || ''}, { Authorization: `Bearer ${token}` })
-
+			const [response, headers] = await customFetch('v1/users', 'GET', { per_page: 20, page: pageIndex+1, filters: hotFilters || ''}, { Authorization: `Bearer ${token}` })
 			setData(response.users);
+			setTotal(response.total);
 			setLoading(false)
 			setPageCount(response.pages)
 		} catch (e) {
@@ -85,8 +99,8 @@ const Customers = ({ history }) => {
 		//fetchCustomers();
 	}, [])
 
-	const fetchData = useCallback(({ pageSize, pageIndex, state }) => {
-		fetchCustomers({pageSize, pageIndex, state});
+	const fetchData = useCallback(({ pageSize, pageIndex, state, hotFilters }) => {
+		fetchCustomers({pageSize, pageIndex, state, hotFilters});
 	}, [])
 
 
@@ -97,7 +111,7 @@ const Customers = ({ history }) => {
 
 			<RouteWithSidebar>
 				<CustomHeader currentUser={currentUser} history={history}/>
-				<Breadcrumb name='Customers' createNew={false} />
+				<Breadcrumb name='Customers' createNew={true} path={`/customers/new`} title='Add New Customers' />
 				<Gist>
 					<NewTable
 						columns={columns}
@@ -106,6 +120,7 @@ const Customers = ({ history }) => {
 						loading={loading}
 						pageCount={pageCount}
 						filters={filters}
+						total={total}
 						handleOnInputChange={handleOnInputChange}
 					/>
 				</Gist>

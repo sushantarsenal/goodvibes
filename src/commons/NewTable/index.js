@@ -118,6 +118,9 @@ const Styles = styled.div`
 	`,
 	Container = styled.div`
 		width: 100%;
+	`,
+	Options = styled.div`
+		border: 1px solid red;
 	`
 
 // Let's add a fetchData method to our Table component that will be used to fetch
@@ -129,11 +132,11 @@ export default function Table({
 	fetchData,
 	loading,
 	filters,
+	total,
 	handleOnInputChange,
 	pageCount: controlledPageCount,
 }) {
 
-	console.log(filters)
 	const {
 		getTableProps,
 		getTableBodyProps,
@@ -176,7 +179,7 @@ export default function Table({
 	// Render the UI for your table
 	return (
 		<>
-			<pre>
+			{/* <pre>
 				<code>
 					{JSON.stringify(
 						{
@@ -190,7 +193,7 @@ export default function Table({
 						2
 					)}
 				</code>
-			</pre>
+			</pre> */}
 			<Styles>
 
 			<table {...getTableProps()}>
@@ -203,7 +206,7 @@ export default function Table({
 									{/* Render the columns filter UI */}
 									{column.Filter && <input
 										type="text"
-										value={filters[column.id] || ''}
+										value={(filters && filters[column.id]) || ''}
 										id="search-input"
 										placeholder="Search..."
 										onChange={e => {
@@ -230,7 +233,11 @@ export default function Table({
 						return (
 							<tr {...row.getRowProps()}>
 								{row.cells.map(cell => {
-									return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+									if (cell.column.type === 'options'){
+										return <td><cell.column.Options /></td>
+									}else{
+										return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+									}
 								})}
 							</tr>
 						)
@@ -241,8 +248,8 @@ export default function Table({
 							<td colSpan="10000">Loading...</td>
 						) : (
 								<td colSpan="10000">
-									Showing {page.length} of ~{controlledPageCount * pageSize}{' '}
-									results
+									<i>Showing {page.length} of ~{total}{' '}
+										results</i>
               </td>
 							)}
 					</tr>
@@ -284,7 +291,7 @@ export default function Table({
 						style={{ width: '100px' }}
 					/>
 				</span>{' '}
-				<select
+				{/* <select
 					value={pageSize}
 					onChange={e => {
 						setPageSize(Number(e.target.value))
@@ -295,7 +302,7 @@ export default function Table({
 							Show {pageSize}
 						</option>
 					))}
-				</select>
+				</select> */}
 			</div>
 		</>
 	)

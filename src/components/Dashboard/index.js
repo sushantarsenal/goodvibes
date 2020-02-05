@@ -18,9 +18,9 @@ import MiniCustomers from '../Customers/MiniCustomers'
 import MiniTracks from '../Tracks/MiniTracks'
 
 const Dashboard = ({ history }) => {
-	const [loading, updateLoading] = useState(true)
-	const [data, setData] = useState([])
-	const { currentUser } = useContext(UserContext)
+	const [loading, updateLoading] = useState(true),
+		[data, setData] = useState([]),
+		{ currentUser, metrics } = useContext(UserContext)
 
 	// if (loading) return <div>Loading...</div>
 	return (
@@ -32,10 +32,10 @@ const Dashboard = ({ history }) => {
 				<Breadcrumb name='Overview' settings={false} />
 				<Gist style={{background: 'none', padding: 0}}>
 					<CardsContainer>
-						<MiniCard title='Total Tracks' body='25000'></MiniCard>
-						<MiniCard title='Total Customers' body='300'></MiniCard>
-						<MiniCard title='Total Subscribers' body='5000'></MiniCard>
-						<MiniCard title='Total Active Users' body='200'></MiniCard>
+						<MiniCard title='Total Tracks' body={metrics.tracks_count}></MiniCard>
+						<MiniCard title='Total Customers' body={metrics.customers_count}></MiniCard>
+						<MiniCard title='Total Subscribers' body={metrics.subscribers_count}></MiniCard>
+						<MiniCard title='Total Active Users' body={metrics.active_users_count}></MiniCard>
 					</CardsContainer>
 					<MiniTablesContainer>
 						<MiniCustomers title={'Customers'} history={history} />

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useContext } from 'react'
+import React, { useState, useMemo, useEffect, useContext, useCallback, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
@@ -11,14 +11,14 @@ import Sidebar, { RouteWithSidebar } from 'commons/Sidebar'
 import CustomHeader from 'commons/CustomHeader'
 import Gist from 'commons/Style/Gist'
 import Breadcrumb from 'commons/Style/Breadcrumb'
-import Table from 'commons/NewTable'
+import NewTable from 'commons/NewTable'
 import { UserContext } from 'contexts/UserContext'
 import SelectFilter from '../commons/Filter/SelectColumnFilter'
 import styled from 'styled-components'
 
 const MiniTracks = ({ history, title }) => {
-	const [loading, updateLoading] = useState(true)
 	const [data, setData] = useState([])
+	const [loading, setLoading] = useState(false)
 	const { currentUser } = useContext(UserContext)
 
 	const columns = useMemo(
@@ -47,18 +47,24 @@ const MiniTracks = ({ history, title }) => {
 		[]
 	);
 
+	const token = cookie.getToken()
 	const fetchTracks = async () => {
-		const token = cookie.getToken()
-		const fetchData = async () => {
-			const [response, headers] = await customFetch('v1/tracks', 'GET', {}, { Authorization: `Bearer ${token}` })
-			setData(response)
-		};
-		await fetchData();
-		updateLoading(false)
-	}
+		try {
+			setLoading(true)
+			const [response, headers] = await customFetch('v1/tracks', 'GET', { per_page: 10, page: 1, filters: '' }, { Authorization: `Bearer ${token}` })
+			setData(response.tracks);
+			setLoading(false)
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+	const fetchData = useCallback(() => {
+		fetchTracks();
+	}, [])
 
 	useEffect(() => {
-		fetchTracks()
+		fetchData()
 		// updateLoadingState(false)
 	}, [history.location.pathname])
 
@@ -66,7 +72,16 @@ const MiniTracks = ({ history, title }) => {
 	return (
 		<div style={{ width: '48.5%', background: '#fff', padding: '15px 20px' }}>
 			<Title>{title}</Title>
-			<Table columns={columns} data={data} pagination={false} />
+			<NewTable
+				columns={columns}
+				data={data || []}
+				fetchData={fetchData}
+				loading={loading}
+				pageCount={1}
+				filters={{}}
+				total={10}
+				pagination={false}
+			/>
 		</div>
 	)
 }
