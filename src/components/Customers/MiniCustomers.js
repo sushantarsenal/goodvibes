@@ -51,7 +51,7 @@ const MiniCustomers = ({ history, title }) => {
 	const fetchCustomers = async () => {
 		try {
 			setLoading(true)
-			const [response, headers] = await customFetch('v1/users', 'GET', { per_page: 10, page: 1, filters: '' }, { Authorization: `Bearer ${token}` })
+			const [response, headers] = await customFetch('admin/users', 'GET', { per_page: 10, page: 1, filters: '' }, { Authorization: `Bearer ${token}` })
 			setData(response.users);
 			setLoading(false)
 		} catch (e) {

@@ -51,7 +51,7 @@ const MiniTracks = ({ history, title }) => {
 	const fetchTracks = async () => {
 		try {
 			setLoading(true)
-			const [response, headers] = await customFetch('v1/tracks', 'GET', { per_page: 10, page: 1, filters: '' }, { Authorization: `Bearer ${token}` })
+			const [response, headers] = await customFetch('admin/tracks', 'GET', { per_page: 10, page: 1, filters: '' }, { Authorization: `Bearer ${token}` })
 			setData(response.tracks);
 			setLoading(false)
 		} catch (e) {

@@ -70,7 +70,7 @@ const Genres = ({ history }) => {
 	const fetchGenres = async ({ pageSize, pageIndex, state, hotFilters }) => {
 		try {
 			setLoading(true)
-			const [response, headers] = await customFetch('v1/genres', 'GET', { per_page: 20, page: pageIndex+1, filters: hotFilters || '' }, { Authorization: `Bearer ${token}` })
+			const [response, headers] = await customFetch('admin/genres', 'GET', { per_page: 20, page: pageIndex+1, filters: hotFilters || '' }, { Authorization: `Bearer ${token}` })
 			setData(response.genres);
 			setTotal(response.total);
 			debugger

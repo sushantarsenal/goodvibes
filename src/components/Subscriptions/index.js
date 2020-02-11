@@ -81,7 +81,7 @@ const Subscriptions = ({ history }) => {
 	const fetchSubscriptions = async ({ pageSize, pageIndex, state, hotFilters }) => {
 		try {
 			setLoading(true)
-			const [response, headers] = await customFetch('v1/subscriptions', 'GET', { per_page: 20, page: pageIndex+1, filters: hotFilters || '' }, { Authorization: `Bearer ${token}` })
+			const [response, headers] = await customFetch('admin/subscriptions', 'GET', { per_page: 20, page: pageIndex+1, filters: hotFilters || '' }, { Authorization: `Bearer ${token}` })
 			setData(response.subscriptions);
 			setTotal(response.total);
 			setLoading(false)

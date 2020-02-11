@@ -17,7 +17,7 @@ const Form = ({ history }) => {
 			<RouteWithSidebar>
 				<CustomHeader />
 				<Breadcrumb name='New' settings={false} />
-				<Gist>Form in progress..</Gist>
+				<Gist>Form in progress..haha</Gist>
 			</RouteWithSidebar>
 		</Container>
 	)

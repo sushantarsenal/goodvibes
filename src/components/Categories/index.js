@@ -75,7 +75,7 @@ const Categories = ({ history }) => {
 	const fetchCategories = async ({ pageSize, pageIndex, state, hotFilters }) => {
 		try {
 			setLoading(true)
-			const [response, headers] = await customFetch('v1/categories', 'GET', { per_page: 20, page: pageIndex+1, filters: hotFilters || '' }, { Authorization: `Bearer ${token}` })
+			const [response, headers] = await customFetch('admin/categories', 'GET', { per_page: 20, page: pageIndex+1, filters: hotFilters || '' }, { Authorization: `Bearer ${token}` })
 			setData(response.categories);
 			setTotal(response.total);
 			setLoading(false)

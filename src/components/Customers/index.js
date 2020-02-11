@@ -85,7 +85,7 @@ const Customers = ({ history }) => {
 	const fetchCustomers = async ({ pageSize, pageIndex, state, hotFilters }) => {
 		try {
 			setLoading(true)
-			const [response, headers] = await customFetch('v1/users', 'GET', { per_page: 20, page: pageIndex+1, filters: hotFilters || ''}, { Authorization: `Bearer ${token}` })
+			const [response, headers] = await customFetch('admin/users', 'GET', { per_page: 20, page: pageIndex+1, filters: hotFilters || ''}, { Authorization: `Bearer ${token}` })
 			setData(response.users);
 			setTotal(response.total);
 			setLoading(false)
