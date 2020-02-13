@@ -48,7 +48,7 @@ const UserProvider = ({ history, children }) => {
   }
 
   useEffect(() => {
-    fetchUser()
+    isLogin() && fetchUser()
   }, [history.location.pathname])
 
   if (loading) return <div>Loading...</div>

@@ -7,16 +7,12 @@ import { connect } from 'react-redux'
 
 import { isEmpty, isSubmitButtonDisabled, customFetch } from 'utils'
 import validate from 'utils/validate'
-import { UserContext } from 'contexts/UserContext'
-import { isAdmin } from 'utils/role'
-import { CUSTOMERS } from 'constants/routes'
 import setSession from '../commons/setSession'
 import { ResendDiv } from './styled'
 import Login from './Login'
 
 const App = ({ handleSubmit, history, location, ...props }) => {
   const [loading, setLoading] = useState(false)
-  const [loginPop, changeLoginPop] = useState('')
   const [message, changeMessage] = useState(get(location, 'state.message'))
   // const { refetchUser } = useContext(UserContext)
 
