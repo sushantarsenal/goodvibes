@@ -42,6 +42,7 @@ function App({ history }) {
           to={DASHBOARD}
         />
         <Route exact path={CUSTOMERS.NEW} component={CustomersForm} />
+        <Route exact path={CUSTOMERS.EDIT} component={CustomersForm} />
         <Route exact path={TRACKS.NEW} component={CustomersForm} />
         <Route exact path={CATEGORIES.NEW} component={CustomersForm} />
         <Route exact path={GENRES.NEW} component={CustomersForm} />

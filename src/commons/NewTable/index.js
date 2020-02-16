@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
 import { useTable, useFilters, useSortBy, usePagination, useGlobalFilter } from 'react-table'
-import cookie from 'utils/cookie'
-import { isLogin, customFetch } from 'utils'
+import { NavLink } from 'react-router-dom'
 import matchSorter from 'match-sorter'
 
 
@@ -121,6 +120,14 @@ const Styles = styled.div`
 	`,
 	Options = styled.div`
 		border: 1px solid red;
+	`,
+	Link = styled(NavLink)`
+		font-size: 14px;
+		cursor: pointer !important;
+	`,
+	CustomLink = styled.span`
+		font-size: 14px;
+		cursor: pointer !important;
 	`
 
 // Let's add a fetchData method to our Table component that will be used to fetch
@@ -134,6 +141,7 @@ export default function Table({
 	filters,
 	total,
 	handleOnInputChange,
+	deleteRecord,
 	pageCount: controlledPageCount,
 }) {
 
@@ -234,7 +242,17 @@ export default function Table({
 							<tr {...row.getRowProps()}>
 								{row.cells.map(cell => {
 									if (cell.column.type === 'options'){
-										return <td><cell.column.Options /></td>
+										if (cell.row.original.id){
+											return (<td>
+												<Link to={{ pathname: `/customers/${cell.row.original.id}/edit`, record: {...cell.row.original} }}>Edit</Link>
+													{/* <Link to={`/customers/${cell.row.original.id}/edit`} style={{ color: 'blue' }} record={'haha'}>Edit</Link> */}
+													<span> | </span>
+												<CustomLink style={{ color: 'red' }} onClick={e => {
+													deleteRecord(`admin/${cell.column.table}/${cell.row.original.id}`)
+													}}>Delete</CustomLink>
+												</td>
+											)
+										}
 									}else{
 										return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
 									}

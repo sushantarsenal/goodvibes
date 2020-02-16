@@ -47,10 +47,10 @@ const Login = ({
           <CustomButton primary type="submit" disabled={disabled} style={{ marginRight: 10 }}>
             Login
           </CustomButton>
-          <ChangePage>
+          {/* <ChangePage>
             <AccountInfo>{infoMessage}</AccountInfo>
             <StyledLink to="/auth/signup">Sign Up</StyledLink>
-          </ChangePage>
+          </ChangePage> */}
         </ButtonsWrapper>
       </Form>
 

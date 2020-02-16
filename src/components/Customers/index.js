@@ -13,11 +13,9 @@ import Gist from 'commons/Style/Gist'
 import Breadcrumb from 'commons/Style/Breadcrumb'
 import NewTable from 'commons/NewTable'
 import { UserContext } from 'contexts/UserContext'
-import SelectFilter from '../commons/Filter/SelectColumnFilter'
 
-import { CUSTOMERS } from 'constants/routes'
-
-import {isEmpty} from 'lodash'
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 const Customers = ({ history }) => {
 	const {currentUser} = useContext(UserContext)
@@ -58,13 +56,13 @@ const Customers = ({ history }) => {
 					{
 						Header: "Status",
 						accessor: "status",
-						Filter: SelectFilter,
-						filter: 'includes'
+						Filter: false
 					},
 					{
 						Header: "Options",
 						accessor: "",
 						type: 'options',
+						table: 'users',
 						Options: optionsLinks
 					}
 				]
@@ -78,7 +76,7 @@ const Customers = ({ history }) => {
 		const hotFilters = filters
 		hotFilters[column] = value
 		console.log(hotFilters)
-		fetchData({ pageSize, pageIndex, state, hotFilters})
+		value.length > 3 && fetchData({ pageSize, pageIndex, state, hotFilters})
 	};
 
 	const token = cookie.getToken()
@@ -103,6 +101,33 @@ const Customers = ({ history }) => {
 		fetchCustomers({pageSize, pageIndex, state, hotFilters});
 	}, [])
 
+	const deleteRecord = async (url) => {
+		try {
+			confirmAlert({
+				title: 'Confirm to delete',
+				message: 'Are you sure, you want to delete this record?',
+				buttons: [
+					{
+						label: 'Yes',
+						onClick: () => {
+							customFetch(url, 'DELETE', {}, { Authorization: `Bearer ${token}` })
+							history.push('/customers')
+						}
+					},
+					{
+						label: 'No',
+						onClick: () => history.push('/customers')
+					}
+				]
+			});
+			// if (proceed){
+			// 	const [response] = await customFetch(url, 'DELETE', {}, { Authorization: `Bearer ${token}` })
+			// }
+			// history.push('/customers')
+		} catch (e) {
+
+		}
+	}
 
 	//if (loading) return <div>Loading...</div>
 	return (
@@ -122,6 +147,7 @@ const Customers = ({ history }) => {
 						filters={filters}
 						total={total}
 						handleOnInputChange={handleOnInputChange}
+						deleteRecord={deleteRecord}
 					/>
 				</Gist>
 			</RouteWithSidebar>

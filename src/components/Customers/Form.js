@@ -1,6 +1,11 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import PropTypes from 'prop-types'
-import { Route, Switch, Redirect } from 'react-router-dom'
+
+import { reduxForm, Field } from 'redux-form'
+import { connect } from 'react-redux'
+import { last, capitalize } from 'lodash'
+import validate from 'utils/validate'
+import { compose } from 'redux'
 
 import Container from 'commons/Container'
 import getSidebarItems from '../commons/WrapperWithSidebar/sidebarItems'
@@ -9,15 +14,65 @@ import CustomHeader from 'commons/CustomHeader'
 import Gist from 'commons/Style/Gist'
 import Breadcrumb from 'commons/Style/Breadcrumb'
 
-const Form = ({ history }) => {
+import { customFetch } from 'utils'
+import { Form } from '../styled'
+import { getNames } from 'country-list'
+import cookie from 'utils/cookie'
+import NewForm from './NewForm'
+
+const Profile = ({ history, initialize, ...props}) => {
+	const locationPath = props.location.pathname.split('/')
+	const [loading, setLoading] = useState(false)
+	const [action] = useState(last(locationPath)),
+		[id] = useState(locationPath[locationPath.length - 2]),
+		[record, setRecord] = useState({})
+
+	const token = cookie.getToken()
+	const handleFormSubmit = async (values) => {
+		try {
+			const [response] = await customFetch('admin/users', 'POST', {
+				...values
+			})
+			if (response.user) history.push('/customers')
+		} catch (e) {
+
+		}
+	}
+	const countries = getNames().map(item => ({ id: item, value: item }))
+
+
+	const fetchCustomer = async (id) => {
+		try {
+			setLoading(true)
+			const [response, headers] = await customFetch(`admin/users/${id}`, 'GET', {}, { Authorization: `Bearer ${token}` })
+			setLoading(false)
+			setRecord(response)
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+	useEffect(() => {
+		if (action === 'edit'){
+			fetchCustomer(id)
+			initialize({
+				record: record || {}
+			})
+		}
+		//fetchCustomers();
+	}, [props.location.pathname])
+
+
 	return (
 		<Container>
 			<Sidebar items={getSidebarItems()} history={history} />
 
 			<RouteWithSidebar>
 				<CustomHeader />
-				<Breadcrumb name='New' settings={false} />
-				<Gist>Form in progress..haha</Gist>
+				<Breadcrumb name={capitalize(action)} settings={false} />
+				<Gist>
+					<NewForm history={history} initialValues={record}/>
+				</Gist>
 			</RouteWithSidebar>
 		</Container>
 	)
@@ -26,5 +81,20 @@ const Form = ({ history }) => {
 Form.propTypes = {
 	history: PropTypes.object
 }
-export default Form
+
+const fields = {
+	full_name: { required: true, label: 'Full Name' },
+	email: { required: true, label: 'Email' },
+}
+
+export default compose(
+	connect((state, props) => {
+
+	}),
+	reduxForm({
+		form: 'newProfile',
+		fields: { ...fields },
+		validate,
+	}),
+)(Profile)
 

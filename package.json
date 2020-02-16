@@ -36,6 +36,7 @@
     "react-apollo-hooks": "^0.4.5",
     "react-app-polyfill": "^1.0.4",
     "react-chartjs-2": "^2.7.6",
+    "react-confirm-alert": "^2.4.1",
     "react-datepicker": "^2.5.0",
     "react-dom": "^16.8.6",
     "react-ga": "^2.7.0",
@@ -63,7 +64,16 @@
     "styled-components": "^4.2.0"
   },
   "scripts": {
-    "start": "react-scripts start"
+    "start": "react-scripts start",
+    "build:staging": "node_modules/.bin/env-cmd .env.staging react-scripts build",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "build:testing": "npm run build:staging",
+    "build:stable": "npm run build",
+    "deploy:stable": "aws s3 sync build/ s3://admin-goodvibesoffical-dev --acl public-read && npm run-script invalidate-cache-production:live",
+    "deploy": "npm run build && npm run deploy:stable",
+    "invalidate-cache-production:live": "aws configure set preview.cloudfront true"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -79,18 +89,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build:staging": "node_modules/.bin/env-cmd .env.staging react-scripts build",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "build:testing": "npm run build:staging",
-    "build:stable": "npm run build",
-    "deploy:stable": "aws s3 sync build/ s3://admin-goodvibesoffical-dev --acl public-read && npm run-script invalidate-cache-production:live",
-    "deploy": "npm run build && npm run deploy:stable",
-    "invalidate-cache-production:live": "aws configure set preview.cloudfront true"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",

@@ -48,7 +48,7 @@ export const CUSTOMERS = {
   INDEX: CUSTOMER_PATH,
   NEW: `${CUSTOMER_PATH}/new`,
   VIEW: `${CUSTOMER_PATH}/:id`,
-  EDIT: `${CUSTOMER_PATH}/:id`,
+  EDIT: `${CUSTOMER_PATH}/:id/edit`,
 }
 
 export const DASHBOARD = '/home'

@@ -8,7 +8,7 @@ import axios from 'axios'
 
 export default async function customFetch(
   endpoint,
-  method = 'GET',
+  method,
   body,
   headers,
 ) {
@@ -18,7 +18,8 @@ export default async function customFetch(
       method,
       url    : `${API_ENDPOINT}/${endpoint}`,
       headers: metaHeaders,
-      params   : body
+      params   : body,
+      data: body
     })
     return [response.data, await response.headers]
   } catch (error) {

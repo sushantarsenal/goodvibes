@@ -73,7 +73,6 @@ const Genres = ({ history }) => {
 			const [response, headers] = await customFetch('admin/genres', 'GET', { per_page: 20, page: pageIndex+1, filters: hotFilters || '' }, { Authorization: `Bearer ${token}` })
 			setData(response.genres);
 			setTotal(response.total);
-			debugger
 			setLoading(false)
 			setPageCount(response.pages)
 		} catch (e) {
