@@ -3,21 +3,20 @@ import PropTypes from 'prop-types'
 
 import { reduxForm, Field } from 'redux-form'
 import { connect } from 'react-redux'
-import { TextField, SelectField } from 'commons/Forms/InputField'
+import { TextField, FileField, SelectField, DateField } from 'commons/Forms/InputField'
 import Button from 'commons/Buttons/NormalButton'
 import validate from 'utils/validate'
 import { compose } from 'redux'
 
 import Row from 'commons/Forms/Row'
-import { isSubmitButtonDisabled, normalizeName, customFetch } from 'utils'
+import { isSubmitButtonDisabled, customFetch } from 'utils'
 import { Form } from '../styled'
-import { getNames } from 'country-list'
 import cookie from 'utils/cookie'
 import { omitBy, isNil, isEmpty } from 'lodash'
 
 const NewForm = ({ history, initialValues, action, id, ...props}) => {
 	const token = cookie.getToken()
-	const associationFields = ['country']
+	const associationFields = ['category']
 
 	const handleFormSubmit = async (values) => {
 		const formData = new FormData();
@@ -30,17 +29,16 @@ const NewForm = ({ history, initialValues, action, id, ...props}) => {
 
 		try {
 			let response
-			if (action === 'new'){
-				[response] = await customFetch(`admin/users`, 'POST', formData, { Authorization: `Bearer ${token}` })
-			}else{
-				[response] = await customFetch(`admin/users/${id}`, 'PUT', formData, { Authorization: `Bearer ${token}` })
+			if (action === 'new') {
+				[response] = await customFetch(`admin/genres`, 'POST', formData, { Authorization: `Bearer ${token}`})
+			} else {
+				[response] = await customFetch(`admin/genres/${id}`, 'PUT', formData, { Authorization: `Bearer ${token}`})
 			}
-			if (response.user) history.push('/customers')
+			if (response.genre) history.push('/genres')
 		} catch (e) {
-
+			console.log(e)
 		}
 	}
-	const countries = getNames().map(item => ({ id: item, value: item }))
 
 	return (
 		<Form
@@ -50,35 +48,8 @@ const NewForm = ({ history, initialValues, action, id, ...props}) => {
 		>
 			<Row>
 				<Field
-					name="full_name"
-					label="Full Name *"
-					component={TextField}
-					normalize={normalizeName}
-				/>
-			</Row>
-			<Row>
-				<Field
-					name="email"
-					label="Email *"
-					component={TextField}
-				/>
-				<Field
-					name="country"
-					label="Country"
-					component={SelectField}
-					isSearchable
-					options={countries}
-				/>
-			</Row>
-			<Row>
-				<Field
-					name="city"
-					label="Address"
-					component={TextField}
-				/>
-				<Field
-					name="state"
-					label="State"
+					name="name"
+					label="Genre Name *"
 					component={TextField}
 				/>
 			</Row>
@@ -99,8 +70,7 @@ Form.propTypes = {
 }
 
 const fields = {
-	full_name: { required: true, label: 'Full Name' },
-	email: { required: true, label: 'Email' },
+	name: { required: true, label: 'Genre Name' }
 }
 
 export default compose(

@@ -14,13 +14,8 @@ import NewTable from 'commons/NewTable'
 import { UserContext } from 'contexts/UserContext'
 import SelectFilter from '../commons/Filter/SelectColumnFilter'
 
-const optionsLinks = () => {
-	return (<>
-		<span>Edit</span>
-		<span> | </span>
-		<span>Delete</span>
-	</>)
-}
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 const Genres = ({ history }) => {
 	const { currentUser } = useContext(UserContext)
@@ -33,7 +28,7 @@ const Genres = ({ history }) => {
 	const columns = useMemo(
 		() => [
 			{
-				Header: "Genres",
+				Header: "genres",
 				columns: [
 					{
 						Header: "Genre Name",
@@ -50,7 +45,7 @@ const Genres = ({ history }) => {
 						Header: "Options",
 						accessor: "",
 						type: 'options',
-						Options: optionsLinks
+						table: 'genres'
 					}
 				]
 			}
@@ -88,12 +83,35 @@ const Genres = ({ history }) => {
 		fetchGenres({ pageSize, pageIndex, state, hotFilters });
 	}, [])
 
+	const deleteRecord = async (url) => {
+		try {
+			confirmAlert({
+				title: 'Confirm to delete',
+				message: 'Are you sure, you want to delete this record?',
+				buttons: [
+					{
+						label: 'Yes',
+						onClick: () => {
+							customFetch(url, 'DELETE', {}, { Authorization: `Bearer ${token}` })
+							history.push('/genres')
+						}
+					},
+					{
+						label: 'No',
+						onClick: () => history.push('/genres')
+					}
+				]
+			});
+		} catch (e) {
+			console.log(e)
+		}
+	}
+
 
 	//if (loading) return <div>Loading...</div>
 	return (
 		<Container>
 			<Sidebar items={getSidebarItems()} history={history} />
-
 			<RouteWithSidebar>
 				<CustomHeader currentUser={currentUser} history={history} />
 				<Breadcrumb name='Genres' createNew={true} path={`/genres/new`} title='Add New Genre' />
@@ -106,6 +124,7 @@ const Genres = ({ history }) => {
 						pageCount={pageCount}
 						filters={filters}
 						total={total}
+						deleteRecord={deleteRecord}
 						handleOnInputChange={handleOnInputChange}
 					/>
 				</Gist>

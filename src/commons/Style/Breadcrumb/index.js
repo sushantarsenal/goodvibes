@@ -26,7 +26,7 @@ const Container = styled.div`
 	min-width: ${({ fluid }) => fluid ? '100%' : '991px'};
   color: ${theme.color.text.primary};
 	margin-top: 20px;
-	padding: 10px 20px 10px 0;
+	padding: 10px 0 10px 0;
 	margin: 20px 40px;
 	justify-content: space-between;
 	align-items: baseline;
@@ -42,7 +42,8 @@ const Container = styled.div`
 	`,
 	CustomButton = styled(Button.Content)`
     text-transform: uppercase;
-    height: 40px;
+		height: 40px;
+		margin-right: 0 !important;
 	`,
 	Link = styled(NavLink)`
     color: #fff

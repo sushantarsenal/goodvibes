@@ -15,6 +15,9 @@ import NewTable from 'commons/NewTable'
 import { UserContext } from 'contexts/UserContext'
 import SelectFilter from '../commons/Filter/SelectColumnFilter'
 
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+
 const Subscriptions = ({ history }) => {
 	const { currentUser } = useContext(UserContext)
 	const [data, setData] = useState([])
@@ -99,6 +102,29 @@ const Subscriptions = ({ history }) => {
 		fetchSubscriptions({ pageSize, pageIndex, state, hotFilters });
 	}, [])
 
+	const deleteRecord = async (url) => {
+		try {
+			confirmAlert({
+				title: 'Confirm to delete',
+				message: 'Are you sure, you want to delete this record?',
+				buttons: [
+					{
+						label: 'Yes',
+						onClick: () => {
+							customFetch(url, 'DELETE', {}, { Authorization: `Bearer ${token}` })
+							history.push('/subscriptions')
+						}
+					},
+					{
+						label: 'No',
+						onClick: () => history.push('/subscriptions')
+					}
+				]
+			});
+		} catch (e) {
+			console.log(e)
+		}
+	}
 
 	//if (loading) return <div>Loading...</div>
 	return (
@@ -117,6 +143,7 @@ const Subscriptions = ({ history }) => {
 						pageCount={pageCount}
 						filters={filters}
 						total={total}
+						deleteRecord={deleteRecord}
 						handleOnInputChange={handleOnInputChange}
 					/>
 				</Gist>

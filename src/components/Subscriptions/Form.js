@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import PropTypes from 'prop-types'
 
 import { last, capitalize } from 'lodash'
+
 import Container from 'commons/Container'
 import getSidebarItems from '../commons/WrapperWithSidebar/sidebarItems'
 import Sidebar, { RouteWithSidebar } from 'commons/Sidebar'
@@ -15,30 +16,21 @@ import { getNames } from 'country-list'
 import cookie from 'utils/cookie'
 import NewForm from './NewForm'
 
-const Profile = ({ history, ...props}) => {
+const Track = ({ history, ...props}) => {
 	const locationPath = props.location.pathname.split('/')
 	const [loading, setLoading] = useState(false)
 	const [action] = useState(last(locationPath)),
 		[id] = useState(locationPath[locationPath.length - 2]),
-		[record, setRecord] = useState({})
+		[record, setRecord] = useState({ paid: false, push_notification: true, active: true}),
+		[categories, setCategories] = useState([])
 
 	const token = cookie.getToken()
-	const handleFormSubmit = async (values) => {
-		try {
-			const [response] = await customFetch('admin/users', 'POST', {
-				...values
-			})
-			if (response.user) history.push('/customers')
-		} catch (e) {
-
-		}
-	}
 	const countries = getNames().map(item => ({ id: item, value: item }))
 
-	const fetchCustomer = async (id) => {
+	const fetchTrack = async (id) => {
 		try {
 			setLoading(true)
-			const [response, headers] = await customFetch(`admin/users/${id}`, 'GET', {}, { Authorization: `Bearer ${token}` })
+			const [response, headers] = await customFetch(`admin/tracks/${id}`, 'GET', {}, { Authorization: `Bearer ${token}` })
 			setLoading(false)
 			setRecord(response)
 		} catch (e) {
@@ -46,12 +38,25 @@ const Profile = ({ history, ...props}) => {
 		}
 	};
 
+	const fetchCategories = async () => {
+		try {
+			setLoading(true)
+			const [response, headers] = await customFetch(`admin/categories`, 'GET', {}, { Authorization: `Bearer ${token}` })
+			setLoading(false)
+			setCategories(response.categories)
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
 	useEffect(() => {
 		if (action === 'edit'){
-			fetchCustomer(id)
+			fetchTrack(id)
 		}
+		fetchCategories()
 	}, [props.location.pathname])
 
+	console.log(record)
 	return (
 		<Container>
 			<Sidebar items={getSidebarItems()} history={history} />
@@ -59,7 +64,7 @@ const Profile = ({ history, ...props}) => {
 				<CustomHeader />
 				<Breadcrumb name={capitalize(action)} settings={false} />
 				<Gist>
-					<NewForm history={history} initialValues={record} action = {action} id={id}/>
+					<NewForm history={history} initialValues={record} action={action} id={id} categories={categories}/>
 				</Gist>
 			</RouteWithSidebar>
 		</Container>
@@ -70,5 +75,5 @@ Form.propTypes = {
 	history: PropTypes.object
 }
 
-export default Profile;
+export default Track
 

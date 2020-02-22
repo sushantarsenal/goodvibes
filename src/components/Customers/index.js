@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
 import cookie from 'utils/cookie'
-import { isLogin, customFetch } from 'utils'
+import { customFetch } from 'utils'
 
 import Container from 'commons/Container'
 import getSidebarItems from '../commons/WrapperWithSidebar/sidebarItems'
@@ -25,18 +25,10 @@ const Customers = ({ history }) => {
 	const [filters, setFilters] = useState({})
 	const [total, setTotal] = useState(0)
 
-	const optionsLinks = () => {
-		return (<>
-			<span>Edit</span>
-			<span> | </span>
-			<span>Delete</span>
-		</>)
-	}
-
 	const columns = useMemo(
 		() => [
 			{
-				Header: "Customers",
+				Header: "customers",
 				columns: [
 					{
 						Header: "Email",
@@ -54,6 +46,11 @@ const Customers = ({ history }) => {
 						accessor: "plan"
 					},
 					{
+						Header: "Country",
+						accessor: "country",
+						type: 'association'
+					},
+					{
 						Header: "Status",
 						accessor: "status",
 						Filter: false
@@ -63,7 +60,7 @@ const Customers = ({ history }) => {
 						accessor: "",
 						type: 'options',
 						table: 'users',
-						Options: optionsLinks
+						disable: true
 					}
 				]
 			}
@@ -83,7 +80,7 @@ const Customers = ({ history }) => {
 	const fetchCustomers = async ({ pageSize, pageIndex, state, hotFilters }) => {
 		try {
 			setLoading(true)
-			const [response, headers] = await customFetch('admin/users', 'GET', { per_page: 20, page: pageIndex+1, filters: hotFilters || ''}, { Authorization: `Bearer ${token}` })
+			const [response] = await customFetch('admin/users', 'GET', { per_page: 20, page: pageIndex+1, filters: hotFilters || ''}, { Authorization: `Bearer ${token}` })
 			setData(response.users);
 			setTotal(response.total);
 			setLoading(false)
@@ -120,13 +117,14 @@ const Customers = ({ history }) => {
 					}
 				]
 			});
-			// if (proceed){
-			// 	const [response] = await customFetch(url, 'DELETE', {}, { Authorization: `Bearer ${token}` })
-			// }
-			// history.push('/customers')
 		} catch (e) {
-
+			console.log(e)
 		}
+	}
+
+	const disableEnable = async (url, val) => {
+		const [response] = await customFetch(url, 'PUT', val, { Authorization: `Bearer ${token}` })
+		history.push('/customers')
 	}
 
 	//if (loading) return <div>Loading...</div>
@@ -136,7 +134,7 @@ const Customers = ({ history }) => {
 
 			<RouteWithSidebar>
 				<CustomHeader currentUser={currentUser} history={history}/>
-				<Breadcrumb name='Customers' createNew={true} path={`/customers/new`} title='Add New Customers' />
+				<Breadcrumb name='Customers' createNew={true} path={`/customers/new`} title='Add New Customer' />
 				<Gist>
 					<NewTable
 						columns={columns}
@@ -148,6 +146,7 @@ const Customers = ({ history }) => {
 						total={total}
 						handleOnInputChange={handleOnInputChange}
 						deleteRecord={deleteRecord}
+						disableEnable={disableEnable}
 					/>
 				</Gist>
 			</RouteWithSidebar>

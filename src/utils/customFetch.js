@@ -17,7 +17,7 @@ export default async function customFetch(
     const response = await axios({
       method,
       url    : `${API_ENDPOINT}/${endpoint}`,
-      headers: metaHeaders,
+      headers: headers['Content-Type'] ? headers : metaHeaders,
       params   : body,
       data: body
     })

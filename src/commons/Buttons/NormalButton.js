@@ -24,7 +24,7 @@ export default styled.button`
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  padding: 0 15px;
+  padding: 0 25px;
   cursor: pointer;
   font-size: 14px;
   border: none;

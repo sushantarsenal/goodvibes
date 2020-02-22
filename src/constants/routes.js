@@ -3,7 +3,7 @@ export const USERS = {
   INDEX: USER_PATH,
   NEW: `${USER_PATH}/new`,
   VIEW: `${USER_PATH}/:id`,
-  EDIT: `${USER_PATH}/:id`,
+  EDIT: `${USER_PATH}/:id/edit`,
 }
 
 const GENRE_PATH = '/genres'
@@ -11,7 +11,7 @@ export const GENRES = {
   INDEX: GENRE_PATH,
   NEW: `${GENRE_PATH}/new`,
   VIEW: `${GENRE_PATH}/:id`,
-  EDIT: `${GENRE_PATH}/:id`,
+  EDIT: `${GENRE_PATH}/:id/edit`,
 }
 
 const CATEGORY_PATH = '/categories'
@@ -19,7 +19,7 @@ export const CATEGORIES = {
   INDEX: CATEGORY_PATH,
   NEW: `${CATEGORY_PATH}/new`,
   VIEW: `${CATEGORY_PATH}/:id`,
-  EDIT: `${CATEGORY_PATH}/:id`,
+  EDIT: `${CATEGORY_PATH}/:id/edit`,
 }
 
 const TRACK_PATH = '/tracks'
@@ -27,7 +27,7 @@ export const TRACKS = {
   INDEX: TRACK_PATH,
   NEW: `${TRACK_PATH}/:new`,
   VIEW: `${TRACK_PATH}/:id`,
-  EDIT: `${TRACK_PATH}/:id`,
+  EDIT: `${TRACK_PATH}/:id/edit`,
 }
 
 const EMAIL_MARKETING_PATH = '/email-marketing'
@@ -40,7 +40,7 @@ export const SUBSCRIPTIONS = {
   INDEX: SUBSCRIPTION_PATH,
   NEW: `${SUBSCRIPTION_PATH}/new`,
   VIEW: `${SUBSCRIPTION_PATH}/:id`,
-  EDIT: `${SUBSCRIPTION_PATH}/:id`,
+  EDIT: `${SUBSCRIPTION_PATH}/:id/edit`,
 }
 
 const CUSTOMER_PATH = '/customers'

@@ -13,7 +13,9 @@ import Gist from 'commons/Style/Gist'
 import Breadcrumb from 'commons/Style/Breadcrumb'
 import NewTable from 'commons/NewTable'
 import { UserContext } from 'contexts/UserContext'
-import SelectFilter from '../commons/Filter/SelectColumnFilter'
+
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 const Tracks = ({ history }) => {
 	const { currentUser } = useContext(UserContext)
@@ -23,18 +25,10 @@ const Tracks = ({ history }) => {
 	const [filters, setFilters] = useState({})
 	const [total, setTotal] = useState(0)
 
-	const optionsLinks = () => {
-		return (<>
-			<span>Edit</span>
-			<span> | </span>
-			<span>Delete</span>
-		</>)
-	}
-
 	const columns = useMemo(
 		() => [
 			{
-				Header: "Tracks",
+				Header: "tracks",
 				columns: [
 					{
 						Header: "Title",
@@ -51,6 +45,11 @@ const Tracks = ({ history }) => {
 						accessor: "duration"
 					},
 					{
+						Header: "Category",
+						accessor: "category",
+						type: "association"
+					},
+					{
 						Header: "Artist",
 						accessor: "composer_name",
 					},
@@ -58,7 +57,7 @@ const Tracks = ({ history }) => {
 						Header: "Options",
 						accessor: "",
 						type: 'options',
-						Options: optionsLinks
+						table: 'tracks'
 					}
 				]
 			}
@@ -96,15 +95,38 @@ const Tracks = ({ history }) => {
 		fetchTracks({ pageSize, pageIndex, state, hotFilters });
 	}, [])
 
+	const deleteRecord = async (url) => {
+		try {
+			confirmAlert({
+				title: 'Confirm to delete',
+				message: 'Are you sure, you want to delete this record?',
+				buttons: [
+					{
+						label: 'Yes',
+						onClick: () => {
+							customFetch(url, 'DELETE', {}, { Authorization: `Bearer ${token}` })
+							history.push('/tracks')
+						}
+					},
+					{
+						label: 'No',
+						onClick: () => history.push('/tracks')
+					}
+				]
+			});
+		} catch (e) {
+			console.log(e)
+		}
+	}
+
 
 	//if (loading) return <div>Loading...</div>
 	return (
 		<Container>
 			<Sidebar items={getSidebarItems()} history={history} />
-
 			<RouteWithSidebar>
 				<CustomHeader currentUser={currentUser} history={history} />
-				<Breadcrumb name='Tracks' createNew={true} path={`/tracks/new`} title='Add New Tracks' />
+				<Breadcrumb name='Tracks' createNew={true} path={`/tracks/new`} title='Add New Track' />
 				<Gist>
 					<NewTable
 						columns={columns}
@@ -114,6 +136,7 @@ const Tracks = ({ history }) => {
 						pageCount={pageCount}
 						filters={filters}
 						total={total}
+						deleteRecord={deleteRecord}
 						handleOnInputChange={handleOnInputChange}
 					/>
 				</Gist>

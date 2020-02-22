@@ -142,6 +142,7 @@ export default function Table({
 	total,
 	handleOnInputChange,
 	deleteRecord,
+	disableEnable,
 	pageCount: controlledPageCount,
 }) {
 
@@ -244,7 +245,13 @@ export default function Table({
 									if (cell.column.type === 'options'){
 										if (cell.row.original.id){
 											return (<td>
-												<Link to={{ pathname: `/customers/${cell.row.original.id}/edit`, record: {...cell.row.original} }}>Edit</Link>
+												{cell.column.disable &&
+												<><CustomLink onClick={e => {
+													disableEnable(`admin/${cell.column.table}/${cell.row.original.id}`, { disabled: !cell.row.original.disabled })
+												}}>{cell.row.original.disabled ? 'Enable' : 'Disable'}</CustomLink>
+													<span> | </span>
+													</>}
+												<Link to={{ pathname: `/${cell.column.parent.Header}/${cell.row.original.id}/edit`, record: {...cell.row.original} }}>Edit</Link>
 													{/* <Link to={`/customers/${cell.row.original.id}/edit`} style={{ color: 'blue' }} record={'haha'}>Edit</Link> */}
 													<span> | </span>
 												<CustomLink style={{ color: 'red' }} onClick={e => {
@@ -253,7 +260,12 @@ export default function Table({
 												</td>
 											)
 										}
-									}else{
+									} else if (cell.column.type === 'association') {
+										// let val = JSON.parse(cell.value)
+
+										return <td {...cell.getCellProps()}>{cell.value === {} ? '' : cell.value['value'] }</td>
+									}
+									else{
 										return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
 									}
 								})}

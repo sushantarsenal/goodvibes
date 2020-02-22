@@ -19,7 +19,11 @@ import Subscriptions from '../../components/Subscriptions'
 import Slider from '../../components/Slider'
 import Settings from '../../components/Settings'
 
-import CustomersForm from '../Customers/Form'
+import CustomerForm from '../Customers/Form'
+import TrackForm from '../Tracks/Form'
+import GenreForm from '../Genres/Form'
+import CategoryForm from '../Categories/Form'
+import SubscriptionForm from '../Subscriptions/Form'
 
 
 function App({ history }) {
@@ -41,12 +45,17 @@ function App({ history }) {
           from='/'
           to={DASHBOARD}
         />
-        <Route exact path={CUSTOMERS.NEW} component={CustomersForm} />
-        <Route exact path={CUSTOMERS.EDIT} component={CustomersForm} />
-        <Route exact path={TRACKS.NEW} component={CustomersForm} />
-        <Route exact path={CATEGORIES.NEW} component={CustomersForm} />
-        <Route exact path={GENRES.NEW} component={CustomersForm} />
-        <Route exact path={SUBSCRIPTIONS.NEW} component={CustomersForm} />
+        <Route exact path={CUSTOMERS.NEW} component={CustomerForm} />
+        <Route exact path={CUSTOMERS.EDIT} component={CustomerForm} />
+        <Route exact path={TRACKS.NEW} component={TrackForm} />
+        <Route exact path={TRACKS.EDIT} component={TrackForm} />
+        <Route exact path={CATEGORIES.NEW} component={CategoryForm} />
+        <Route exact path={CATEGORIES.EDIT} component={CategoryForm} />
+        <Route exact path={GENRES.NEW} component={GenreForm} />
+        <Route exact path={GENRES.EDIT} component={GenreForm} />
+        <Route exact path={SUBSCRIPTIONS.NEW} component={SubscriptionForm} />
+        <Route exact path={SUBSCRIPTIONS.EDIT} component={SubscriptionForm} />
+
         <PrivateRoute path={DASHBOARD} component={Dashboard} />
         <PrivateRoute path={CUSTOMERS.INDEX} component={Customers} />
         <PrivateRoute path={EMAIL_MARKETINGS.INDEX} component={EmailMarketings} />

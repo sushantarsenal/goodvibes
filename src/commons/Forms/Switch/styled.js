@@ -2,7 +2,7 @@
 * Unauthorized copying of this file, via any medium is strictly prohibited
 * Proprietary and confidential
 * Bryan Starbuck <bryan@go9.com>, October 2019
-*/          
+*/
 import styled from 'styled-components'
 
 import theme from 'constants/theme'
@@ -38,7 +38,7 @@ export const SwitchComponent = styled.div`
     min-width: 42px;
     z-index: 1;
     background-color: ${props =>
-    props.checked ? theme.color.primary : theme.color.text.primaryLight};
+    props.checked ? '#49d963' : theme.color.text.primaryLight};
   `,
   Toggle = styled.div`
     background-color: ${theme.color.white};
