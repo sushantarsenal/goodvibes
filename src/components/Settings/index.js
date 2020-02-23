@@ -17,7 +17,7 @@ const Settings = ({ history }) => {
 			<RouteWithSidebar>
 				<CustomHeader />
 				<Breadcrumb name='Settings' settings={false} />
-				<Gist>This is it.</Gist>
+				<Gist>Coming very very soon.</Gist>
 			</RouteWithSidebar>
 		</Container>
 	)

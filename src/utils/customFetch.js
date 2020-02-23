@@ -14,13 +14,24 @@ export default async function customFetch(
 ) {
   const metaHeaders = { ...headers, 'Content-Type': 'application/json' }
   try {
-    const response = await axios({
-      method,
-      url    : `${API_ENDPOINT}/${endpoint}`,
-      headers: headers['Content-Type'] ? headers : metaHeaders,
-      params   : body,
-      data: body
-    })
+    let response;
+    if (headers){
+      response = await axios({
+        method,
+        url    : `${API_ENDPOINT}/${endpoint}`,
+        headers: headers['Content-Type'] ? headers : metaHeaders,
+        params   : body,
+        data: body
+      })
+    }else{
+      response = await axios({
+        method,
+        url: `${API_ENDPOINT}/${endpoint}`,
+        headers: metaHeaders,
+        params: body,
+        data: body
+      })
+    }
     return [response.data, await response.headers]
   } catch (error) {
     return [error.response.data, await error.response.headers]

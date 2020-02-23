@@ -12,7 +12,7 @@ import Row from 'commons/Forms/Row'
 import { isSubmitButtonDisabled, customFetch } from 'utils'
 import { Form } from '../styled'
 import cookie from 'utils/cookie'
-import { omitBy, isNil, isEmpty } from 'lodash'
+import { pickBy } from 'lodash'
 
 const NewForm = ({ history, initialValues, action, id, ...props}) => {
 	const token = cookie.getToken()
@@ -20,11 +20,12 @@ const NewForm = ({ history, initialValues, action, id, ...props}) => {
 
 	const handleFormSubmit = async (values) => {
 		const formData = new FormData();
-		const newValues = omitBy(omitBy(values, isEmpty), isNil)
+		const newValues = pickBy(values, v => v !== undefined && v !== null)
+		// pick not null values here so that null values don't have to be stringified
+		// do json.stringify for every values here and JSON.parse on every value son server
 		const keys = Object.keys(newValues)
-
 		keys.map(key => {
-			formData.append(key, associationFields.includes(key) ? values[key]['id'] : values[key])
+			formData.append(key, associationFields.includes(key) ? values[key]['id'] || "" : values[key] || "")
 		})
 
 		try {
