@@ -262,8 +262,7 @@ export default function Table({
 										}
 									} else if (cell.column.type === 'association') {
 										// let val = JSON.parse(cell.value)
-
-										return <td {...cell.getCellProps()}>{cell.value === {} ? '' : cell.value['value'] }</td>
+										return <td {...cell.getCellProps()}>{cell.value === {} ? '' : cell.value['value'] || '' }</td>
 									}
 									else{
 										return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>

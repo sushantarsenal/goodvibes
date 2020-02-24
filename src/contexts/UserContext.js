@@ -35,8 +35,8 @@ const UserProvider = ({ history, children }) => {
     setLoading(true)
     const token = cookie.getToken()
     const [response, headers] = await customFetch('admin/users/present_user', 'GET', {}, { Authorization: `Bearer ${token}` })
-    if (response.current_user.email) {
-      const user = response.current_user,
+    if (response.current_user[0].email) {
+      const user = response.current_user[0],
         numbers = omit(response, ['current_user'])
       setCurrentUser(user)
       setMetrics(numbers)

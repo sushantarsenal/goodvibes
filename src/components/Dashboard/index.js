@@ -16,6 +16,8 @@ import styled from 'styled-components'
 import MiniCard from 'commons/MiniCard'
 import MiniCustomers from '../Customers/MiniCustomers'
 import MiniTracks from '../Tracks/MiniTracks'
+import MiniLogs from '../Logs/MiniLogs'
+import CustomerChart from '../Chart/CustomerChart'
 
 const Dashboard = ({ history }) => {
 	const [loading, updateLoading] = useState(true),
@@ -41,7 +43,10 @@ const Dashboard = ({ history }) => {
 						<MiniCustomers title={'Customers'} history={history} />
 						<MiniTracks title={'Trending Tracks'} history={history} />
 					</MiniTablesContainer>
-
+					<MiniTablesContainer>
+						<MiniLogs title={'Activity Logs'} history={history} />
+						<CustomerChart title={'Customer Growth Chart'} history={history} />
+					</MiniTablesContainer>
 				</Gist>
 			</RouteWithSidebar>
 		</Container>

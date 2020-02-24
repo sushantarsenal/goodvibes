@@ -25,7 +25,6 @@ const NewForm = ({ history, initialValues, action, id, categories, ...props}) =>
 		// pick not null values here so that null values don't have to be stringified
 		// do json.stringify for every values here and JSON.parse on every value son server
 		const keys = Object.keys(newValues)
-		debugger
 		keys.map(key => {
 			formData.append(key, associationFields.includes(key) ? values[key]['id'] || "" : values[key] || "")
 		})
