@@ -22,7 +22,7 @@ const Track = ({ history, ...props}) => {
 	const [action] = useState(last(locationPath)),
 		[id] = useState(locationPath[locationPath.length - 2]),
 		[record, setRecord] = useState({ paid: false, push_notification: true, active: true}),
-		[categories, setCategories] = useState([])
+		[genres, setGenres] = useState([])
 
 	const token = cookie.getToken()
 	const countries = getNames().map(item => ({ id: item, value: item }))
@@ -33,6 +33,18 @@ const Track = ({ history, ...props}) => {
 			const [response, headers] = await customFetch(`admin/categories/${id}`, 'GET', {}, { Authorization: `Bearer ${token}` })
 			setLoading(false)
 			setRecord(response)
+			debugger
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+	const fetchGenres = async () => {
+		try {
+			setLoading(true)
+			const [response, headers] = await customFetch(`admin/genres`, 'GET', {}, { Authorization: `Bearer ${token}` })
+			setLoading(false)
+			setGenres(response.genres)
 		} catch (e) {
 			console.log(e);
 		}
@@ -42,6 +54,7 @@ const Track = ({ history, ...props}) => {
 		if (action === 'edit'){
 			fetchCategory(id)
 		}
+		fetchGenres()
 	}, [props.location.pathname])
 
 	console.log(record)
@@ -52,7 +65,7 @@ const Track = ({ history, ...props}) => {
 				<CustomHeader />
 				<Breadcrumb name={capitalize(action)} settings={false} />
 				<Gist>
-					<NewForm history={history} initialValues={record} action={action} id={id}/>
+					<NewForm history={history} initialValues={record} action={action} id={id} genres={genres}/>
 				</Gist>
 			</RouteWithSidebar>
 		</Container>

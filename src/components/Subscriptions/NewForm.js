@@ -15,9 +15,9 @@ import cookie from 'utils/cookie'
 import { pickBy } from 'lodash'
 import Switch from 'commons/Forms/Switch'
 
-const NewForm = ({ history, initialValues, action, id, categories, ...props}) => {
+const NewForm = ({ history, initialValues, action, id, users, ...props}) => {
 	const token = cookie.getToken()
-	const associationFields = ['category']
+	const associationFields = ['user_id']
 
 	const handleFormSubmit = async (values) => {
 		const formData = new FormData();
@@ -32,20 +32,20 @@ const NewForm = ({ history, initialValues, action, id, categories, ...props}) =>
 		try {
 			let response
 			if (action === 'new') {
-				[response] = await customFetch(`admin/tracks`, 'POST', formData, { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' })
+				[response] = await customFetch(`admin/subscriptions`, 'POST', formData, { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' })
 			} else {
-				[response] = await customFetch(`admin/tracks/${id}`, 'PUT', formData, { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' })
+				[response] = await customFetch(`admin/subscriptions/${id}`, 'PUT', formData, { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' })
 			}
-			if (response.track) history.push('/tracks')
+			if (response.subscription) history.push('/subscriptions')
 		} catch (e) {
 			console.log(e)
 		}
 	}
 
-	const categoryList = categories.map(item => ({ id: item.id, value: item.name }))
+	const userList = users.map(item => ({ id: item.id, value: item.full_name }))
 	const trackExt = ['.mp3', '.wav']
 	const imgExt = ['.jpg', '.jpeg', '.png']
-
+	console.log(userList)
 	return (
 		<Form
 			onSubmit={props.handleSubmit(values =>
@@ -61,11 +61,11 @@ const NewForm = ({ history, initialValues, action, id, categories, ...props}) =>
 			</Row>
 			<Row>
 				<Field
-					name="category"
-					label="Category"
+					name="user_id"
+					label="Customer"
 					component={SelectField}
 					isSearchable
-					options={categoryList}
+					options={userList}
 				/>
 				<Field
 					name="track_code"

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import { last, capitalize } from 'lodash'
@@ -16,21 +16,21 @@ import { getNames } from 'country-list'
 import cookie from 'utils/cookie'
 import NewForm from './NewForm'
 
-const Track = ({ history, ...props}) => {
+const Subscription = ({ history, ...props }) => {
 	const locationPath = props.location.pathname.split('/')
 	const [loading, setLoading] = useState(false)
 	const [action] = useState(last(locationPath)),
 		[id] = useState(locationPath[locationPath.length - 2]),
-		[record, setRecord] = useState({ paid: false, push_notification: true, active: true}),
-		[categories, setCategories] = useState([])
+		[record, setRecord] = useState({}),
+		[users, setUsers] = useState([])
 
 	const token = cookie.getToken()
 	const countries = getNames().map(item => ({ id: item, value: item }))
 
-	const fetchTrack = async (id) => {
+	const fetchSubscription = async (id) => {
 		try {
 			setLoading(true)
-			const [response, headers] = await customFetch(`admin/tracks/${id}`, 'GET', {}, { Authorization: `Bearer ${token}` })
+			const [response, headers] = await customFetch(`admin/subscriptions/${id}`, 'GET', {}, { Authorization: `Bearer ${token}` })
 			setLoading(false)
 			setRecord(response)
 		} catch (e) {
@@ -38,22 +38,23 @@ const Track = ({ history, ...props}) => {
 		}
 	};
 
-	const fetchCategories = async () => {
+	const fetchUsers = async () => {
 		try {
 			setLoading(true)
-			const [response, headers] = await customFetch(`admin/categories`, 'GET', {}, { Authorization: `Bearer ${token}` })
+			const [response, headers] = await customFetch(`admin/users`, 'GET', {}, { Authorization: `Bearer ${token}` })
+			debugger
 			setLoading(false)
-			setCategories(response.categories)
+			setUsers(response.users)
 		} catch (e) {
 			console.log(e);
 		}
 	};
 
 	useEffect(() => {
-		if (action === 'edit'){
-			fetchTrack(id)
+		if (action === 'edit') {
+			fetchSubscription(id)
 		}
-		fetchCategories()
+		fetchUsers()
 	}, [props.location.pathname])
 
 	console.log(record)
@@ -64,7 +65,7 @@ const Track = ({ history, ...props}) => {
 				<CustomHeader />
 				<Breadcrumb name={capitalize(action)} settings={false} />
 				<Gist>
-					<NewForm history={history} initialValues={record} action={action} id={id} categories={categories}/>
+					<NewForm history={history} initialValues={record} action={action} id={id} users={users} />
 				</Gist>
 			</RouteWithSidebar>
 		</Container>
@@ -75,5 +76,5 @@ Form.propTypes = {
 	history: PropTypes.object
 }
 
-export default Track
+export default Subscription
 

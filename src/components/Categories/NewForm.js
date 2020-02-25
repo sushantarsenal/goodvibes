@@ -14,9 +14,9 @@ import { Form } from '../styled'
 import cookie from 'utils/cookie'
 import { pickBy } from 'lodash'
 
-const NewForm = ({ history, initialValues, action, id, ...props}) => {
+const NewForm = ({ history, initialValues, action, id, genres, ...props}) => {
 	const token = cookie.getToken()
-	const associationFields = ['category']
+	const associationFields = ['genre_id']
 
 	const handleFormSubmit = async (values) => {
 		const formData = new FormData();
@@ -31,15 +31,16 @@ const NewForm = ({ history, initialValues, action, id, ...props}) => {
 		try {
 			let response
 			if (action === 'new') {
-				[response] = await customFetch(`admin/tracks`, 'POST', formData, { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' })
+				[response] = await customFetch(`admin/categories`, 'POST', formData, { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' })
 			} else {
-				[response] = await customFetch(`admin/tracks/${id}`, 'PUT', formData, { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' })
+				[response] = await customFetch(`admin/categories/${id}`, 'PUT', formData, { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' })
 			}
-			if (response.track) history.push('/tracks')
+			if (response.category) history.push('/categories')
 		} catch (e) {
 			console.log(e)
 		}
 	}
+	const genreList = genres.map(item => ({ id: item.id, value: item.name }))
 
 	return (
 		<Form
@@ -54,9 +55,11 @@ const NewForm = ({ history, initialValues, action, id, ...props}) => {
 					component={TextField}
 				/>
 				<Field
-					name="genre"
+					name="genre_id"
 					label="Genre"
-					component={TextField}
+					component={SelectField}
+					isSearchable
+					options={genreList}
 				/>
 			</Row>
 			<Row>
@@ -93,7 +96,7 @@ export default compose(
 		}
 	}),
 	reduxForm({
-		form: 'newNewForm',
+		form: 'newCategoryForm',
 		fields: { ...fields },
 		validate,
 		enableReinitialize: true,

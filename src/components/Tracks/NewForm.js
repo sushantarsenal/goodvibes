@@ -79,6 +79,11 @@ const NewForm = ({ history, initialValues, action, id, categories, ...props}) =>
 					label="Composer Name"
 					component={TextField}
 				/>
+				<Field
+					name="published_at"
+					label="Publish Date"
+					component={DateField}
+				/>
 			</Row>
 			<Row>
 				<Field
@@ -137,7 +142,7 @@ Form.propTypes = {
 }
 
 const fields = {
-	name: { required: true, label: 'Full Name' }
+	name: { required: true, label: 'Track Title' }
 }
 
 export default compose(
@@ -147,7 +152,7 @@ export default compose(
 		}
 	}),
 	reduxForm({
-		form: 'newNewForm',
+		form: 'newTrackForm',
 		fields: { ...fields },
 		validate,
 		enableReinitialize: true,

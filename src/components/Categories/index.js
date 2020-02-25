@@ -47,7 +47,8 @@ const Categories = ({ history }) => {
 					},
 					{
 						Header: "Genre",
-						accessor: "genre.name",
+						accessor: "genre",
+						type: "association"
 					},
 					{
 						Header: "Track Count",
