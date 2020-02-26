@@ -14,6 +14,7 @@ import Breadcrumb from 'commons/Style/Breadcrumb'
 import NewTable from 'commons/NewTable'
 import { UserContext } from 'contexts/UserContext'
 import SelectFilter from '../commons/Filter/SelectColumnFilter'
+import { debounce } from 'lodash'
 
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
@@ -127,7 +128,7 @@ const Subscriptions = ({ history }) => {
 
 			<RouteWithSidebar>
 				<CustomHeader currentUser={currentUser} history={history} />
-				<Breadcrumb name='Subscriptions' createNew={true} path={`/subscriptions/new`} title='Add New Subscriptions' />
+				<Breadcrumb name='Subscriptions' createNew={true} path={`/subscriptions/new`} title='Add New Subscription' />
 				<Gist>
 					<NewTable
 						columns={columns}
@@ -138,7 +139,7 @@ const Subscriptions = ({ history }) => {
 						filters={filters}
 						total={total}
 						deleteRecord={deleteRecord}
-						handleOnInputChange={handleOnInputChange}
+						handleOnInputChange={debounce(handleOnInputChange, 150)}
 					/>
 				</Gist>
 			</RouteWithSidebar>

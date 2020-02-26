@@ -14,6 +14,7 @@ import Breadcrumb from 'commons/Style/Breadcrumb'
 import NewTable from 'commons/NewTable'
 import { UserContext } from 'contexts/UserContext'
 import SelectFilter from '../commons/Filter/SelectColumnFilter'
+import { debounce } from 'lodash'
 
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
@@ -140,7 +141,7 @@ const Categories = ({ history }) => {
 						filters={filters}
 						total={total}
 						deleteRecord={deleteRecord}
-						handleOnInputChange={handleOnInputChange}
+						handleOnInputChange={debounce(handleOnInputChange, 150)}
 					/>
 				</Gist>
 			</RouteWithSidebar>

@@ -13,6 +13,7 @@ import Gist from 'commons/Style/Gist'
 import Breadcrumb from 'commons/Style/Breadcrumb'
 import NewTable from 'commons/NewTable'
 import { UserContext } from 'contexts/UserContext'
+import { debounce } from 'lodash'
 
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
@@ -137,7 +138,7 @@ const Tracks = ({ history }) => {
 						filters={filters}
 						total={total}
 						deleteRecord={deleteRecord}
-						handleOnInputChange={handleOnInputChange}
+						handleOnInputChange={debounce(handleOnInputChange, 150)}
 					/>
 				</Gist>
 			</RouteWithSidebar>

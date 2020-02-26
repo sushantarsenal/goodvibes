@@ -13,6 +13,7 @@ import Gist from 'commons/Style/Gist'
 import Breadcrumb from 'commons/Style/Breadcrumb'
 import NewTable from 'commons/NewTable'
 import { UserContext } from 'contexts/UserContext'
+import { debounce } from 'lodash'
 
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
@@ -73,7 +74,7 @@ const Customers = ({ history }) => {
 		const hotFilters = filters
 		hotFilters[column] = value
 		console.log(hotFilters)
-		value.length > 3 && fetchData({ pageSize, pageIndex, state, hotFilters})
+		fetchData({ pageSize, pageIndex, state, hotFilters})
 	};
 
 	const token = cookie.getToken()
@@ -124,6 +125,7 @@ const Customers = ({ history }) => {
 
 	const disableEnable = async (url, val) => {
 		const [response] = await customFetch(url, 'PUT', val, { Authorization: `Bearer ${token}` })
+		debugger
 		history.push('/customers')
 	}
 
@@ -144,7 +146,7 @@ const Customers = ({ history }) => {
 						pageCount={pageCount}
 						filters={filters}
 						total={total}
-						handleOnInputChange={handleOnInputChange}
+						handleOnInputChange={debounce(handleOnInputChange, 150)}
 						deleteRecord={deleteRecord}
 						disableEnable={disableEnable}
 					/>
