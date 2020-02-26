@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { reduxForm, Field } from 'redux-form'
 import { connect } from 'react-redux'
-import { TextField, FileField, SelectField, DateField } from 'commons/Forms/InputField'
+import { TextField, FileField, SelectField, DateField, AutoSuggestion } from 'commons/Forms/InputField'
 import Button from 'commons/Buttons/NormalButton'
 import validate from 'utils/validate'
 import { compose } from 'redux'
@@ -36,16 +36,15 @@ const NewForm = ({ history, initialValues, action, id, users, ...props}) => {
 			} else {
 				[response] = await customFetch(`admin/subscriptions/${id}`, 'PUT', formData, { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' })
 			}
+			debugger
 			if (response.subscription) history.push('/subscriptions')
 		} catch (e) {
 			console.log(e)
 		}
 	}
 
-	const userList = users.map(item => ({ id: item.id, value: item.full_name }))
-	const trackExt = ['.mp3', '.wav']
-	const imgExt = ['.jpg', '.jpeg', '.png']
-	console.log(userList)
+	const plans = [{ id: 'monthly', value: 'Monthly' }, { id: 'yearly', value: 'Yearly'}]
+
 	return (
 		<Form
 			onSubmit={props.handleSubmit(values =>
@@ -54,70 +53,33 @@ const NewForm = ({ history, initialValues, action, id, users, ...props}) => {
 		>
 			<Row>
 				<Field
-					name="name"
-					label="Track Title *"
+					name="package_name"
+					label="Package Name *"
 					component={TextField}
+				/>
+				<Field
+					name="subs"
+					label="Plan"
+					component={SelectField}
+					options={plans}
 				/>
 			</Row>
 			<Row>
 				<Field
 					name="user_id"
-					label="Customer"
-					component={SelectField}
+					label="Select Customer *"
+					component={AutoSuggestion}
+					apiUrl="admin/users"
+					header={{ Authorization: `Bearer ${token}` }}
+					queryInput={''}
 					isSearchable
-					options={userList}
+					placeholder="Select..."
+					allowNewOptions
 				/>
 				<Field
-					name="track_code"
-					label="Track Code"
-					component={TextField}
-				/>
-			</Row>
-			<Row>
-				<Field
-					name="composer_name"
-					label="Composer Name"
-					component={TextField}
-				/>
-			</Row>
-			<Row>
-				<Field
-					style={{ border: "none", paddingLeft: 0 }}
-					name="track_file"
-					label="Track File"
-					component={FileField}
-					accept={trackExt}
-				/>
-				<Field
-					style={{ border: "none", paddingLeft: 0 }}
-					name="image"
-					label="Select Image"
-					component={FileField}
-					accept={imgExt}
-				/>
-			</Row>
-			<Row>
-				<Field
-					name="description"
-					label="Description"
-					component={TextField}
-				/>
-			</Row>
-			<Row>
-				<Field
-					name="active"
-					component={Switch}
-					rightLabel="Active?"
-				/>
-				<Field
-					name="paid"
-					component={Switch}
-					rightLabel="Paid?"
-				/>
-				<Field
-					name="push_notification"
-					component={Switch}
-					rightLabel="Send Push Notification?"
+					name="purchase_time"
+					label="Purchase Date"
+					component={DateField}
 				/>
 			</Row>
 			<Row>
@@ -137,7 +99,8 @@ Form.propTypes = {
 }
 
 const fields = {
-	name: { required: true, label: 'Full Name' }
+	package_name: { required: true, label: 'Full Name' },
+	user_id: { required: true, label: 'Customer' }
 }
 
 export default compose(

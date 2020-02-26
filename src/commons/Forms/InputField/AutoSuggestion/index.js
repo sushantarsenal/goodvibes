@@ -1,14 +1,11 @@
-/* Copyright (C) Go9, Inc - All Rights Reserved
-* Unauthorized copying of this file, via any medium is strictly prohibited
-* Proprietary and confidential
-* Bryan Starbuck <bryan@go9.com>, October 2019
-*/          
+
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { get, debounce } from 'lodash'
-import { useApolloClient } from 'react-apollo-hooks'
+// import { useApolloClient } from 'react-apollo-hooks'
 
 import SelectField from '../SelectField'
+import { customFetch } from 'utils'
 
 const AutoSuggestion = ({
   queryInput,
@@ -17,25 +14,38 @@ const AutoSuggestion = ({
   inputCss,
   companyCategoryId,
   preDefinedOptions,
+  apiUrl,
+  header,
   ...props
 }) => {
   const [options, setOptions] = useState(preDefinedOptions || [])
   const [loading, setLoading] = useState(false)
-  const client = useApolloClient()
-  const onInputChange = value => {
+
+  // const client = useApolloClient()
+
+  const onInputChange = async value => {
     setLoading(true)
-    client
-      .query({
-        query    : queryInput,
-        variables: {
-          querySearchParams: value,
-          companyCategoryId,
-        },
-      })
-      .then(data => {
-        setOptions(get(data, `data.${queryKey}`))
-        setLoading(false)
-      })
+
+    const [response] = await customFetch(apiUrl, 'GET', { filters: { email: value } }, header)
+    if (response.users && response.users.length > 0){
+      const userOptions = response.users.map(item => ({ id: item.id, value: item.email }))
+      debugger
+      setOptions(userOptions)
+      setLoading(false)
+    }
+
+    // client
+    //   .query({
+    //     query    : queryInput,
+    //     variables: {
+    //       querySearchParams: value,
+    //       companyCategoryId,
+    //     },
+    //   })
+    //   .then(data => {
+    //     setOptions(get(data, `data.${queryKey}`))
+    //     setLoading(false)
+    //   })
   }
 
   // console.log('dispaly of options  ... ', options, props.input)

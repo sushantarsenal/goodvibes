@@ -40,25 +40,19 @@ const Subscriptions = ({ history }) => {
 				Header: "Subscriptions",
 				columns: [
 					{
-						Header: "Full Name",
+						Header: "Subscriber",
 						accessor: "user.full_name",
 						Filter: true,
 						type: 'text'
 					},
 					{
-						Header: "Created Date",
+						Header: "Purchase Date",
 						accessor: "purchase_time",
 						Filter: false
 					},
 					{
 						Header: "Plan",
-						accessor: "package_name"
-					},
-					{
-						Header: "Status",
-						accessor: "status",
-						Filter: SelectFilter,
-						filter: 'includes'
+						accessor: "subs"
 					},
 					{
 						Header: "Options",
