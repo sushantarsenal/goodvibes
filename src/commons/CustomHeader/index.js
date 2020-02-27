@@ -6,7 +6,6 @@ import cookie from 'utils/cookie'
 import { UserContext } from 'contexts/UserContext'
 
 import Dropdown from 'commons/Dropdown'
-import Logo from 'assets/images/logo.png'
 import avatar from 'assets/images/avatar.png'
 import {
 	HeaderWrapper,

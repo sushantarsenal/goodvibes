@@ -134,6 +134,7 @@ const Styles = styled.div`
 // new data when pagination state changes
 // We can also add a loading state to let our table know it's loading new data
 export default function Table({
+	header,
 	columns,
 	data,
 	fetchData,
@@ -143,6 +144,7 @@ export default function Table({
 	handleOnInputChange,
 	deleteRecord,
 	disableEnable,
+	pagination,
 	pageCount: controlledPageCount,
 }) {
 
@@ -206,36 +208,39 @@ export default function Table({
 			<Styles>
 
 			<table {...getTableProps()}>
-				<thead>
-					{headerGroups.map(headerGroup => (
-						<tr {...headerGroup.getHeaderGroupProps()}>
-							{headerGroup.headers.map(column => (
-								<th {...column.getHeaderProps()}>
-									{column.render('Header')}
-									{/* Render the columns filter UI */}
-									{column.Filter && <input
-										type="text"
-										value={(filters && filters[column.id]) || ''}
-										id="search-input"
-										placeholder="Search..."
-										onChange={e => {
-											handleOnInputChange(pageSize, pageIndex, state, e.target.value, column.id)
-										}}
-									/>}
-								</th>
+				{
+					header !== false &&
+						<thead>
+							{headerGroups.map(headerGroup => (
+								<tr {...headerGroup.getHeaderGroupProps()}>
+									{headerGroup.headers.map(column => (
+										<th {...column.getHeaderProps()}>
+											{column.render('Header')}
+											{/* Render the columns filter UI */}
+											{column.Filter && <input
+												type="text"
+												value={(filters && filters[column.id]) || ''}
+												id="search-input"
+												placeholder="Search..."
+												onChange={e => {
+													handleOnInputChange(pageSize, pageIndex, state, e.target.value, column.id)
+												}}
+											/>}
+										</th>
+									))}
+								</tr>
 							))}
-						</tr>
-					))}
-					<tr>
-						<th
-							colSpan={flatColumns.length}
-							style={{
-								textAlign: 'left',
-							}}
-						>
-						</th>
-					</tr>
-				</thead>
+							<tr>
+								<th
+									colSpan={flatColumns.length}
+									style={{
+										textAlign: 'left',
+									}}
+								>
+								</th>
+							</tr>
+						</thead>
+				}
 				<tbody {...getTableBodyProps()}>
 					{page.map((row, i) => {
 						prepareRow(row)
@@ -271,17 +276,21 @@ export default function Table({
 							</tr>
 						)
 					})}
-					<tr>
-						{loading ? (
-							// Use our custom loading state to show a loading indicator
-							<td colSpan="10000">Loading...</td>
-						) : (
-								<td colSpan="10000">
-									<i>Showing {page.length} of ~{total}{' '}
-										results</i>
-              </td>
-							)}
-					</tr>
+					{
+						pagination &&
+							<tr>
+								{loading ? (
+									// Use our custom loading state to show a loading indicator
+									<td colSpan="10000">Loading...</td>
+								) : (
+										<td colSpan="10000">
+											<i>Showing {page.length} of ~{total}{' '}
+												results</i>
+										</td>
+									)}
+							</tr>
+					}
+
 				</tbody>
 			</table>
 			</Styles>
@@ -289,38 +298,39 @@ export default function Table({
         Pagination can be built however you'd like.
         This is just a very basic UI implementation:
       */}
-			<div className="pagination">
-				<button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-					{'<<'}
-				</button>{' '}
-				<button onClick={() => previousPage()} disabled={!canPreviousPage}>
-					{'<'}
-				</button>{' '}
-				<button onClick={() => nextPage()} disabled={!canNextPage}>
-					{'>'}
-				</button>{' '}
-				<button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-					{'>>'}
-				</button>{' '}
-				<span>
-					Page{' '}
-					<strong>
-						{pageIndex + 1} of {pageOptions.length}
-					</strong>{' '}
-				</span>
-				<span>
-					| Go to page:{' '}
-					<input
-						type="number"
-						defaultValue={pageIndex + 1}
-						onChange={e => {
-							const page = e.target.value ? Number(e.target.value) - 1 : 0
-							gotoPage(page)
-						}}
-						style={{ width: '100px' }}
-					/>
-				</span>{' '}
-				{/* <select
+			{pagination &&
+				<div className="pagination">
+					<button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+						{'<<'}
+					</button>{' '}
+					<button onClick={() => previousPage()} disabled={!canPreviousPage}>
+						{'<'}
+					</button>{' '}
+					<button onClick={() => nextPage()} disabled={!canNextPage}>
+						{'>'}
+					</button>{' '}
+					<button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+						{'>>'}
+					</button>{' '}
+					<span>
+						Page{' '}
+						<strong>
+							{pageIndex + 1} of {pageOptions.length}
+						</strong>{' '}
+					</span>
+					<span>
+						| Go to page:{' '}
+						<input
+							type="number"
+							defaultValue={pageIndex + 1}
+							onChange={e => {
+								const page = e.target.value ? Number(e.target.value) - 1 : 0
+								gotoPage(page)
+							}}
+							style={{ width: '100px' }}
+						/>
+					</span>{' '}
+					{/* <select
 					value={pageSize}
 					onChange={e => {
 						setPageSize(Number(e.target.value))
@@ -332,7 +342,8 @@ export default function Table({
 						</option>
 					))}
 				</select> */}
-			</div>
+				</div>
+			}
 		</>
 	)
 }

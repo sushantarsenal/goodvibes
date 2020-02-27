@@ -11,7 +11,7 @@ import { useApolloClient } from 'react-apollo-hooks'
 
 import cookie from 'utils/cookie'
 import theme from 'constants/theme'
-import logo from 'assets/images/logo.png'
+import logo from 'assets/images/goodvibes.jpg'
 
 const Header = ({ showLogOutBtn, history }) => {
   // const client = useApolloClient();

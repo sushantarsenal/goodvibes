@@ -12,13 +12,13 @@ import { faChevronRight, faChevronDown } from '@fortawesome/free-solid-svg-icons
 
 import theme from 'constants/theme'
 import Dropdown from 'commons/Dropdown'
-import robot from 'assets/images/robot.png'
+// import robot from 'assets/images/robot.png'
 
 const Breadcrumb = ({ items, history, maxItemWidth }) => {
   return (
     <Wrapper>
       <NavLink to="/">
-        <img src={robot} height={45} style={{ cursor: 'pointer' }} />
+        {/* <img src={robot} height={45} style={{ cursor: 'pointer' }} /> */}
       </NavLink>
       {(items || []).map(item => (
         <ItemWrapper key={item.title}>

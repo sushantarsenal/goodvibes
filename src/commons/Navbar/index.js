@@ -7,7 +7,7 @@ import { useApolloClient } from 'react-apollo-hooks'
 
 import Dropdown from 'commons/Dropdown'
 import { UserContext } from 'contexts/UserContext'
-import Logo from 'assets/images/logo.png'
+import Logo from 'assets/images/goodvibes.jpg'
 import avatar from 'assets/images/avatar.png'
 import {
   HeaderWrapper,

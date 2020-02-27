@@ -139,6 +139,7 @@ const Tracks = ({ history }) => {
 						total={total}
 						deleteRecord={deleteRecord}
 						handleOnInputChange={debounce(handleOnInputChange, 150)}
+						pagination={true}
 					/>
 				</Gist>
 			</RouteWithSidebar>

@@ -6,7 +6,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import robot from 'assets/images/robot.png'
+// import robot from 'assets/images/robot.png'
 
 const BRANDING_TEXT = 'Are you ready to prosper?'
 
@@ -14,7 +14,7 @@ const Branding = ({ text = BRANDING_TEXT, hideText, hideImage }) => {
   return (
     <Container>
       {!hideText && <Text>{text}</Text>}
-      {!hideImage && <Image src={robot} alt="GrowthAdvisorHQ Robot" />}
+      {/* {!hideImage && <Image src={robot} alt="GrowthAdvisorHQ Robot" />} */}
     </Container>
   )
 }

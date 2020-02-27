@@ -148,6 +148,7 @@ const Customers = ({ history }) => {
 						handleOnInputChange={debounce(handleOnInputChange, 150)}
 						deleteRecord={deleteRecord}
 						disableEnable={disableEnable}
+						pagination={true}
 					/>
 				</Gist>
 			</RouteWithSidebar>
