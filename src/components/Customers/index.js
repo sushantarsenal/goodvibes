@@ -125,8 +125,7 @@ const Customers = ({ history }) => {
 
 	const disableEnable = async (url, val) => {
 		const [response] = await customFetch(url, 'PUT', val, { Authorization: `Bearer ${token}` })
-		debugger
-		history.push('/customers')
+		window.location.reload()
 	}
 
 	//if (loading) return <div>Loading...</div>
