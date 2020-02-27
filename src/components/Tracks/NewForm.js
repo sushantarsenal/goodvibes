@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import PropTypes from 'prop-types'
 
 import { reduxForm, Field } from 'redux-form'
@@ -10,14 +10,21 @@ import { compose } from 'redux'
 
 import Row from 'commons/Forms/Row'
 import { isSubmitButtonDisabled, customFetch } from 'utils'
-import { Form } from '../styled'
+import { Form, Avatar } from '../styled'
 import cookie from 'utils/cookie'
 import { pickBy } from 'lodash'
 import Switch from 'commons/Forms/Switch'
 
 const NewForm = ({ history, initialValues, action, id, categories, ...props}) => {
 	const token = cookie.getToken()
-	const associationFields = ['category_id']
+	const associationFields = ['category_id'],
+		[imgUrl, setImgUrl] = useState(''),
+		apiUrl = process.env.REACT_APP_API_ENDPOINT
+
+	const handleChange = file => {
+		const previewUrl = URL.createObjectURL(file)
+		setImgUrl(previewUrl)
+	}
 
 	const handleFormSubmit = async (values) => {
 		const formData = new FormData();
@@ -98,8 +105,10 @@ const NewForm = ({ history, initialValues, action, id, categories, ...props}) =>
 					name="image"
 					label="Select Image"
 					component={FileField}
+					onChange={event => handleChange(event)}
 					accept={imgExt}
 				/>
+				<Avatar src={imgUrl || `${apiUrl}/${initialValues.track_image}`} />
 			</Row>
 			<Row>
 				<Field
