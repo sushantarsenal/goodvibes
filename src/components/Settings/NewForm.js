@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { reduxForm, Field } from 'redux-form'
 import { connect } from 'react-redux'
-import { TextField, SelectField } from 'commons/Forms/InputField'
+import { TextField, SelectField, PasswordField } from 'commons/Forms/InputField'
 import Button from 'commons/Buttons/NormalButton'
 import validate from 'utils/validate'
 import { compose } from 'redux'
@@ -51,6 +51,11 @@ const NewForm = ({ history, initialValues, id,...props}) => {
 					label="Full Name *"
 					component={TextField}
 					normalize={normalizeName}
+				/>
+				<Field
+					name="password"
+					label="New Password"
+					component={PasswordField}
 				/>
 			</Row>
 			<Row>

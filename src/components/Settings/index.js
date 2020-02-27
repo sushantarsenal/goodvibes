@@ -9,7 +9,6 @@ import CustomHeader from 'commons/CustomHeader'
 import Gist from 'commons/Style/Gist'
 import Breadcrumb from 'commons/Style/Breadcrumb'
 
-import { customFetch } from 'utils'
 import { Form } from '../styled'
 import { getNames } from 'country-list'
 import cookie from 'utils/cookie'

@@ -42,9 +42,9 @@ const Subscriptions = ({ history }) => {
 				columns: [
 					{
 						Header: "Subscriber",
-						accessor: "user.full_name",
+						accessor: "user",
 						Filter: true,
-						type: 'text'
+						type: 'association'
 					},
 					{
 						Header: "Purchase Date",
