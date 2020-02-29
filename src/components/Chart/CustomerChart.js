@@ -6,8 +6,25 @@ import theme from 'constants/theme'
 import cookie from 'utils/cookie'
 import { isLogin, customFetch } from 'utils'
 import styled from 'styled-components'
+
+import { Bar } from 'react-chartjs-2';
 // import Legend from '../Home/commons/Legend/index'
 // import LineChart from '../Home/commons/LineChart/index'
+
+const chartData = {
+	labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+	datasets: [
+		{
+			label: 'Customer Growth',
+			backgroundColor: '#a3a1fb87',
+			borderColor: '#a3a1fbb8',
+			borderWidth: 1,
+			hoverBackgroundColor: '#a3a1fbc7',
+			hoverBorderColor: '#a3a1fbdb',
+			data: [65, 59, 80, 81, 56, 55, 40, 12, 5, 26, 108, 66]
+		}
+	]
+};
 
 const CustomerChart = ({ history, title }) => {
 	const [data, setData] = useState([])
@@ -36,9 +53,16 @@ const CustomerChart = ({ history, title }) => {
 
 	// if (loading) return <div>Loading...</div>
 	return (
-		<div style={{ width: '48.5%', background: '#fff', padding: '15px 20px' }}>
+		<div style={{ width: '55.5%', background: '#fff', padding: '15px 20px' }}>
 			<Title>{title}</Title>
-			<>Here will be the charts.</>
+			<Bar
+				data={chartData}
+				width={100}
+				height={80}
+				options={{
+					maintainAspectRatio: true
+				}}
+			/>
 			{/* <Legend data={{}} />
 			<ChartWrapper>
 				<LineChart data={{}} />

@@ -36,7 +36,7 @@ const MiniLogs = ({ history, title }) => {
 
 	// if (loading) return <div>Loading...</div>
 	return (
-		<div style={{ width: '48.5%', background: '#fff', padding: '15px 20px' }}>
+		<div style={{ width: '41.5%', background: '#fff', padding: '15px 20px' }}>
 			<Title>{title}</Title>
 			<List>{listItems}</List>
 			{/* <NewTable
