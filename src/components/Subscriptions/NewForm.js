@@ -53,19 +53,6 @@ const NewForm = ({ history, initialValues, action, id, users, ...props}) => {
 		>
 			<Row>
 				<Field
-					name="package_name"
-					label="Package Name *"
-					component={TextField}
-				/>
-				<Field
-					name="subs"
-					label="Plan"
-					component={SelectField}
-					options={plans}
-				/>
-			</Row>
-			<Row>
-				<Field
 					name="user_id"
 					label="Select Customer *"
 					component={AutoSuggestion}
@@ -75,6 +62,15 @@ const NewForm = ({ history, initialValues, action, id, users, ...props}) => {
 					isSearchable
 					placeholder="Select..."
 					allowNewOptions
+				/>
+
+			</Row>
+			<Row>
+				<Field
+					name="subs"
+					label="Plan"
+					component={SelectField}
+					options={plans}
 				/>
 				<Field
 					name="purchase_time"

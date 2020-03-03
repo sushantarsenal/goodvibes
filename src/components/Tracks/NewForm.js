@@ -12,18 +12,36 @@ import Row from 'commons/Forms/Row'
 import { isSubmitButtonDisabled, customFetch } from 'utils'
 import { Form, Avatar } from '../styled'
 import cookie from 'utils/cookie'
-import { pickBy } from 'lodash'
+import { pickBy, last } from 'lodash'
 import Switch from 'commons/Forms/Switch'
+import styled, { css } from 'styled-components'
+import defaultCover from 'assets/images/goodvibes.jpg'
+
+import axios from 'axios'
+import { Progress } from 'reactstrap';
+import { API_ENDPOINT } from 'constants/url'
 
 const NewForm = ({ history, initialValues, action, id, categories, ...props}) => {
 	const token = cookie.getToken()
 	const associationFields = ['category_id'],
 		[imgUrl, setImgUrl] = useState(''),
+		[trackUrl, setTrackUrl] = useState(''),
+		[imgName, setImgName] = useState(''),
+		[trackName, setTrackName] = useState(''),
+		[loaded, setLoaded] = useState(0),
 		apiUrl = process.env.REACT_APP_API_ENDPOINT
 
-	const handleChange = file => {
+	const handleImage = file => {
+		debugger
 		const previewUrl = URL.createObjectURL(file)
 		setImgUrl(previewUrl)
+		setImgName(file.name)
+	}
+
+	const handleTrack = file => {
+		const track = URL.createObjectURL(file)
+		setTrackUrl(track)
+		setTrackName(file.name)
 	}
 
 	const handleFormSubmit = async (values) => {
@@ -39,11 +57,34 @@ const NewForm = ({ history, initialValues, action, id, categories, ...props}) =>
 		try {
 			let response
 			if (action === 'new') {
-				[response] = await customFetch(`admin/tracks`, 'POST', formData, { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' })
+				// [response] = await customFetch(`admin/tracks`, 'POST', formData, { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' })
+
+				[response] = await axios({
+					method: 'post',
+					url: `${API_ENDPOINT}/admin/tracks`,
+					data: formData,
+					headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
+					onUploadProgress(progressEvent) {
+						setLoaded(progressEvent.loaded / progressEvent.total * 100)
+					}
+				}).then(({data}) => {
+					debugger
+					if (data.track) history.push('/tracks')
+				})
 			} else {
-				[response] = await customFetch(`admin/tracks/${id}`, 'PUT', formData, { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' })
+				// [response] = await customFetch(`admin/tracks/${id}`, 'PUT', formData, { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' })
+				[response] = await axios({
+					method: 'put',
+					url: `${API_ENDPOINT}/admin/tracks/${id}`,
+					data: formData,
+					headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
+					onUploadProgress(progressEvent) {
+						setLoaded(progressEvent.loaded / progressEvent.total * 100)
+					}
+				}).then(({ data }) => {
+					if (data.track) history.push('/tracks')
+				})
 			}
-			if (response.track) history.push('/tracks')
 		} catch (e) {
 			console.log(e)
 		}
@@ -52,7 +93,7 @@ const NewForm = ({ history, initialValues, action, id, categories, ...props}) =>
 	const categoryList = categories.map(item => ({ id: item.id, value: item.name }))
 	const trackExt = ['.mp3', '.wav']
 	const imgExt = ['.jpg', '.jpeg', '.png']
-
+	console.log(initialValues)
 	return (
 		<Form
 			onSubmit={props.handleSubmit(values =>
@@ -93,22 +134,38 @@ const NewForm = ({ history, initialValues, action, id, categories, ...props}) =>
 				/>
 			</Row>
 			<Row>
-				<Field
-					style={{ border: "none", paddingLeft: 0 }}
-					name="track_file"
-					label="Track File"
-					component={FileField}
-					accept={trackExt}
-				/>
-				<Field
-					style={{ border: "none", paddingLeft: 0 }}
-					name="image"
-					label="Select Image"
-					component={FileField}
-					onChange={event => handleChange(event)}
-					accept={imgExt}
-				/>
-				<Avatar src={imgUrl || `${apiUrl}/${initialValues.track_image}`} />
+				<CustomDiv>
+					<Field
+						style={{ border: "none", paddingLeft: 0 }}
+						name="track_file"
+						label="Track File"
+						component={FileField}
+						accept={trackExt}
+						onChange={event => handleTrack(event)}
+					/>
+
+					<Field
+						style={{ border: "none", paddingLeft: 0}}
+						name="image"
+						label="Select Image"
+						component={FileField}
+						accept={imgExt}
+						onChange={event => handleImage(event)}
+					/>
+				</CustomDiv>
+
+			</Row>
+			<Row>
+				<div class="form-group" style={{ width: '49%', display: 'flex', flexDirection: 'column' }}>
+					<FileName>{trackName || last(initialValues.track_url && initialValues.track_url.split('/'))}</FileName>
+					<div style={{fontWeight: 'bolder'}}>{Math.round(loaded, 2)}%</div>
+					<div style={{ background: '#49d7632b'}}><Bar style={{ width: `${loaded}%` }}></Bar></div>
+				</div>
+
+				<div class="form-group" style={{ width: '49%', display: 'flex', flexDirection: 'column' }}>
+					<FileName>{imgName || last(initialValues.track_image && initialValues.track_image.split('/'))}</FileName>
+					<Avatar src={imgUrl || (initialValues.track_image && `${apiUrl}/${initialValues.track_image}`) || defaultCover} />
+				</div>
 			</Row>
 			<Row>
 				<Field
@@ -139,7 +196,7 @@ const NewForm = ({ history, initialValues, action, id, categories, ...props}) =>
 					type="submit"
 					disabled={isSubmitButtonDisabled(props)}
 				>
-					Save
+					Upload & Save
 				</Button>
 			</Row>
 		</Form>
@@ -153,6 +210,26 @@ Form.propTypes = {
 const fields = {
 	name: { required: true, label: 'Track Title' }
 }
+
+const Bar=styled.div`
+	background: #49d863;
+	height: 6px;
+`,
+CustomDiv=styled.div`
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	input[type='file'] {
+  	color: transparent;
+	}
+`,
+FileName=styled.div`
+	display: block;
+	padding: 5px 0;
+	font-size: 14px;
+	overflow: hidden;
+	color: #444444
+`
 
 export default compose(
 	connect((state, props) => {

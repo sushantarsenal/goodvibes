@@ -60,6 +60,7 @@
     "react-tooltip": "^3.10.0",
     "react-topbar-progress-indicator": "^2.0.0",
     "reactour": "^1.15.0",
+    "reactstrap": "^8.4.1",
     "redux": "^4.0.1",
     "redux-form": "^8.2.0",
     "styled-components": "^4.2.0"
