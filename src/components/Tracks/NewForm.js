@@ -32,7 +32,6 @@ const NewForm = ({ history, initialValues, action, id, categories, ...props}) =>
 		apiUrl = process.env.REACT_APP_API_ENDPOINT
 
 	const handleImage = file => {
-		debugger
 		const previewUrl = URL.createObjectURL(file)
 		setImgUrl(previewUrl)
 		setImgName(file.name)
@@ -68,7 +67,6 @@ const NewForm = ({ history, initialValues, action, id, categories, ...props}) =>
 						setLoaded(progressEvent.loaded / progressEvent.total * 100)
 					}
 				}).then(({data}) => {
-					debugger
 					if (data.track) history.push('/tracks')
 				})
 			} else {

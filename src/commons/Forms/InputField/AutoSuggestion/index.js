@@ -29,7 +29,6 @@ const AutoSuggestion = ({
     const [response] = await customFetch(apiUrl, 'GET', { filters: { email: value } }, header)
     if (response.users && response.users.length > 0){
       const userOptions = response.users.map(item => ({ id: item.id, value: item.email }))
-      debugger
       setOptions(userOptions)
       setLoading(false)
     }

@@ -36,7 +36,6 @@ const NewForm = ({ history, initialValues, action, id, users, ...props}) => {
 			} else {
 				[response] = await customFetch(`admin/subscriptions/${id}`, 'PUT', formData, { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' })
 			}
-			debugger
 			if (response.subscription) history.push('/subscriptions')
 		} catch (e) {
 			console.log(e)

@@ -7,7 +7,7 @@ import { ToastContainer, Slide } from 'react-toastify'
 import Authentication from 'components/Authentication'
 import { UserProvider } from 'contexts/UserContext'
 
-import { DASHBOARD, CUSTOMERS, EMAIL_MARKETINGS, TRACKS, CATEGORIES, GENRES, SUBSCRIPTIONS, SLIDER, SETTINGS } from 'constants/routes'
+import { DASHBOARD, CUSTOMERS, EMAIL_MARKETINGS, TRACKS, CATEGORIES, GENRES, SUBSCRIPTIONS, SLIDER, SETTINGS, LOGS } from 'constants/routes'
 
 import Dashboard from '../../components/Dashboard'
 import Customers from '../../components/Customers'
@@ -18,6 +18,7 @@ import Genres from '../../components/Genres'
 import Subscriptions from '../../components/Subscriptions'
 import Slider from '../../components/Slider'
 import Settings from '../../components/Settings'
+import Logs from '../../components/Logs'
 
 import CustomerForm from '../Customers/Form'
 import TrackForm from '../Tracks/Form'
@@ -65,6 +66,7 @@ function App({ history }) {
         <PrivateRoute path={SUBSCRIPTIONS.INDEX} component={Subscriptions} />
         <PrivateRoute path={SLIDER} component={Slider} />
         <PrivateRoute path={SETTINGS} component={Settings} />
+        <PrivateRoute path={LOGS} component={Logs} />
         <PublicRoute restricted path="/auth" component={Authentication} />
       </Switch>
     </UserProvider>

@@ -31,6 +31,13 @@ const Styles = styled.div`
 						border-bottom: 0;
 					}
 				}
+				td{
+					width: 150px;
+					max-width: 250px;
+					word-break: break-all
+					max-height: 100px;
+					overflow-Y: scroll;
+				}
 			}
 			th{
 				background: #F5F6FA

@@ -42,7 +42,6 @@ const Subscription = ({ history, ...props }) => {
 		try {
 			setLoading(true)
 			const [response, headers] = await customFetch(`admin/users`, 'GET', {}, { Authorization: `Bearer ${token}` })
-			debugger
 			setLoading(false)
 			setUsers(response.users)
 		} catch (e) {

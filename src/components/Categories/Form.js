@@ -33,7 +33,6 @@ const Track = ({ history, ...props}) => {
 			const [response, headers] = await customFetch(`admin/categories/${id}`, 'GET', {}, { Authorization: `Bearer ${token}` })
 			setLoading(false)
 			setRecord(response)
-			debugger
 		} catch (e) {
 			console.log(e);
 		}

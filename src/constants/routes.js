@@ -53,6 +53,8 @@ export const CUSTOMERS = {
 
 export const DASHBOARD = '/home'
 
+export const LOGS = '/logs'
+
 export const SETTINGS = '/settings'
 
 export const SLIDER = '/slider'

@@ -5,7 +5,7 @@
  */
 import { compact } from 'lodash'
 import theme from 'constants/theme'
-import { DASHBOARD, CUSTOMERS, EMAIL_MARKETINGS, TRACKS, CATEGORIES, GENRES, SUBSCRIPTIONS, SLIDER, SETTINGS } from 'constants/routes'
+import { DASHBOARD, CUSTOMERS, EMAIL_MARKETINGS, TRACKS, CATEGORIES, GENRES, SUBSCRIPTIONS, SLIDER, SETTINGS, LOGS } from 'constants/routes'
 
 export default () => {
   return [
@@ -34,7 +34,10 @@ export default () => {
       id: 8, name: 'Slider', link: SLIDER, items: [], hide: false
     },
     {
-      id: 9, name: 'Settings', link: SETTINGS, items: [], hide: false
+      id: 9, name: 'Activity Logs', link: LOGS, items: [], hide: false
+    },
+    {
+      id: 10, name: 'Settings', link: SETTINGS, items: [], hide: false
     },
 
   ]
