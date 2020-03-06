@@ -57,6 +57,7 @@ const Track = ({ history, ...props}) => {
 	}, [props.location.pathname])
 
 	console.log(record)
+	if (!record) return <>Loading..</>
 	return (
 		<Container>
 			<Sidebar items={getSidebarItems()} history={history} />
@@ -64,7 +65,7 @@ const Track = ({ history, ...props}) => {
 				<CustomHeader />
 				<Breadcrumb name={capitalize(action)} settings={false} />
 				<Gist>
-					<NewForm history={history} initialValues={record} action={action} id={id} categories={categories}/>
+					<NewForm history={history} initialValues={record} action={action} id={id} imageName={record.image_name} musicName={record.track_name} categories={categories}/>
 				</Gist>
 			</RouteWithSidebar>
 		</Container>

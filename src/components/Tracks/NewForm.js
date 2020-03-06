@@ -21,25 +21,26 @@ import axios from 'axios'
 import { Progress } from 'reactstrap';
 import { API_ENDPOINT } from 'constants/url'
 
-const NewForm = ({ history, initialValues, action, id, categories, ...props}) => {
+const NewForm = ({ history, initialValues, action, id, categories, imageName, musicName,...props}) => {
 	const token = cookie.getToken()
 	const associationFields = ['category_id'],
 		[imgUrl, setImgUrl] = useState(''),
 		[trackUrl, setTrackUrl] = useState(''),
 		[loaded, setLoaded] = useState(0),
-		apiUrl = process.env.REACT_APP_API_ENDPOINT
-
-	const imgName = initialValues.image_name,
-		trackName = initialValues.track_name
+		apiUrl = process.env.REACT_APP_API_ENDPOINT,
+		[imgName, setImg] = useState(imageName),
+		[trackName, setTrack] = useState(musicName)
 
 	const handleImage = file => {
 		const previewUrl = URL.createObjectURL(file)
 		setImgUrl(previewUrl)
+		setImg(file.name)
 	}
 
 	const handleTrack = file => {
 		const track = URL.createObjectURL(file)
 		setTrackUrl(track)
+		setTrack(file.name)
 	}
 
 	const handleFormSubmit = async (values) => {
@@ -93,6 +94,7 @@ const NewForm = ({ history, initialValues, action, id, categories, ...props}) =>
 	console.log(imgName)
 	console.log(trackName)
 	console.log(initialValues)
+
 	return (
 		<Form
 			onSubmit={props.handleSubmit(values =>
@@ -156,13 +158,13 @@ const NewForm = ({ history, initialValues, action, id, categories, ...props}) =>
 			</Row>
 			<Row>
 				<div class="form-group" style={{ width: '49%', display: 'flex', flexDirection: 'column' }}>
-					<FileName>{trackName || last(initialValues.track_url && initialValues.track_url.split('/'))}</FileName>
+					<FileName>{trackName || (initialValues.track_name && initialValues.track_name)}</FileName>
 					<div style={{fontWeight: 'bolder'}}>{Math.round(loaded, 2)}%</div>
 					<div style={{ background: '#49d7632b'}}><Bar style={{ width: `${loaded}%` }}></Bar></div>
 				</div>
 
 				<div class="form-group" style={{ width: '49%', display: 'flex', flexDirection: 'column' }}>
-					<FileName>{imgName || last(initialValues.track_image && initialValues.track_image.split('/'))}</FileName>
+					<FileName>{imgName || (initialValues.image_name && initialValues.image_name)}</FileName>
 					<Avatar src={imgUrl || (initialValues.track_image && `${apiUrl}/${initialValues.track_image}`) || defaultCover} />
 				</div>
 			</Row>
