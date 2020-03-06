@@ -18,8 +18,8 @@ import styled, { css } from 'styled-components'
 import defaultCover from 'assets/images/goodvibes.jpg'
 
 import axios from 'axios'
-import { Progress } from 'reactstrap';
 import { API_ENDPOINT } from 'constants/url'
+import ReactPlayer from 'react-player'
 
 const NewForm = ({ history, initialValues, action, id, categories, imageName, musicName,...props}) => {
 	const token = cookie.getToken()
@@ -160,7 +160,11 @@ const NewForm = ({ history, initialValues, action, id, categories, imageName, mu
 				<div class="form-group" style={{ width: '49%', display: 'flex', flexDirection: 'column' }}>
 					<FileName>{trackName || (initialValues.track_name && initialValues.track_name)}</FileName>
 					<div style={{fontWeight: 'bolder'}}>{Math.round(loaded, 2)}%</div>
-					<div style={{ background: '#49d7632b'}}><Bar style={{ width: `${loaded}%` }}></Bar></div>
+					<div style={{ background: '#49d7632b', marginBottom: '20px'}}><Bar style={{ width: `${loaded}%` }}></Bar></div>
+					{initialValues.track_url &&
+						<ReactPlayer className='react-player' url={`${apiUrl}/${initialValues.track_url}`} playing={false} controls light height="50px" width="100%" />
+					}
+
 				</div>
 
 				<div class="form-group" style={{ width: '49%', display: 'flex', flexDirection: 'column' }}>

@@ -55,7 +55,7 @@ const NewForm = ({ history, initialValues, action, id, users, ...props}) => {
 					name="user_id"
 					label="Select Customer *"
 					component={AutoSuggestion}
-					apiUrl="admin/users"
+					apiUrl="admin/users/unsubscribed_users"
 					header={{ Authorization: `Bearer ${token}` }}
 					queryInput={''}
 					isSearchable

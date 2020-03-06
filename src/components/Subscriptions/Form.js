@@ -41,7 +41,7 @@ const Subscription = ({ history, ...props }) => {
 	const fetchUsers = async () => {
 		try {
 			setLoading(true)
-			const [response, headers] = await customFetch(`admin/users`, 'GET', {}, { Authorization: `Bearer ${token}` })
+			const [response, headers] = await customFetch(`admin/users/unsubscribed_users`, 'GET', {}, { Authorization: `Bearer ${token}` })
 			setLoading(false)
 			setUsers(response.users)
 		} catch (e) {
