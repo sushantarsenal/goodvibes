@@ -26,21 +26,20 @@ const NewForm = ({ history, initialValues, action, id, categories, ...props}) =>
 	const associationFields = ['category_id'],
 		[imgUrl, setImgUrl] = useState(''),
 		[trackUrl, setTrackUrl] = useState(''),
-		[imgName, setImgName] = useState(''),
-		[trackName, setTrackName] = useState(''),
 		[loaded, setLoaded] = useState(0),
 		apiUrl = process.env.REACT_APP_API_ENDPOINT
+
+	const imgName = initialValues.image_name,
+		trackName = initialValues.track_name
 
 	const handleImage = file => {
 		const previewUrl = URL.createObjectURL(file)
 		setImgUrl(previewUrl)
-		setImgName(file.name)
 	}
 
 	const handleTrack = file => {
 		const track = URL.createObjectURL(file)
 		setTrackUrl(track)
-		setTrackName(file.name)
 	}
 
 	const handleFormSubmit = async (values) => {
@@ -91,6 +90,8 @@ const NewForm = ({ history, initialValues, action, id, categories, ...props}) =>
 	const categoryList = categories.map(item => ({ id: item.id, value: item.name }))
 	const trackExt = ['.mp3', '.wav']
 	const imgExt = ['.jpg', '.jpeg', '.png']
+	console.log(imgName)
+	console.log(trackName)
 	console.log(initialValues)
 	return (
 		<Form
