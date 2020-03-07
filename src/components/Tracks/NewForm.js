@@ -29,7 +29,10 @@ const NewForm = ({ history, initialValues, action, id, categories, imageName, mu
 		[loaded, setLoaded] = useState(0),
 		apiUrl = process.env.REACT_APP_API_ENDPOINT,
 		[imgName, setImg] = useState(imageName),
-		[trackName, setTrack] = useState(musicName)
+		[trackName, setTrack] = useState(musicName),
+		environment = process.env.NODE_ENV
+
+	console.log(process.env)
 
 	const handleImage = file => {
 		const previewUrl = URL.createObjectURL(file)
@@ -42,6 +45,7 @@ const NewForm = ({ history, initialValues, action, id, categories, imageName, mu
 		setTrackUrl(track)
 		setTrack(file.name)
 	}
+
 
 	const handleFormSubmit = async (values) => {
 		const formData = new FormData();
@@ -162,7 +166,7 @@ const NewForm = ({ history, initialValues, action, id, categories, imageName, mu
 					<div style={{fontWeight: 'bolder'}}>{Math.round(loaded, 2)}%</div>
 					<div style={{ background: '#49d7632b', marginBottom: '20px'}}><Bar style={{ width: `${loaded}%` }}></Bar></div>
 					{initialValues.track_url &&
-						<ReactPlayer className='react-player' url={`${apiUrl}/${initialValues.track_url}`} playing={false} controls light height="50px" width="100%" />
+						<ReactPlayer className='react-player' url={environment == 'development' ? `${apiUrl}/${initialValues.track_url}` : initialValues.track_url} playing={false} controls light height="50px" width="100%" />
 					}
 
 				</div>
