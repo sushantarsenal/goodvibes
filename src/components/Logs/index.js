@@ -40,7 +40,8 @@ const Logs = ({ history }) => {
 					{
 						Header: "Created Date",
 						accessor: "created_at",
-						Filter: false
+						Filter: false,
+						sort: true
 					}
 				]
 			}

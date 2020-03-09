@@ -25,6 +25,7 @@ const Tracks = ({ history }) => {
 	const [pageCount, setPageCount] = useState(0)
 	const [filters, setFilters] = useState({})
 	const [total, setTotal] = useState(0)
+	const [order, setOrder] = useState()
 
 	const columns = useMemo(
 		() => [
@@ -55,6 +56,12 @@ const Tracks = ({ history }) => {
 						accessor: "composer_name",
 					},
 					{
+						Header: "Created Date",
+						accessor: "created_at",
+						Filter: false,
+						sort: true
+					},
+					{
 						Header: "Options",
 						accessor: "",
 						type: 'options',
@@ -74,13 +81,20 @@ const Tracks = ({ history }) => {
 		fetchData({ pageSize, pageIndex, state, hotFilters })
 	};
 
+	const sortRows = async (pageSize, pageIndex, state, value) => {
+		await setOrder(value)
+		const hotOrder = value
+		fetchData({ pageSize, pageIndex, state, filters, hotOrder })
+	};
+
 	const token = cookie.getToken()
-	const fetchTracks = async ({ pageSize, pageIndex, state, hotFilters }) => {
+	const fetchTracks = async ({ pageSize, pageIndex, state, hotFilters, hotOrder }) => {
 		try {
 			setLoading(true)
-			const [response, headers] = await customFetch('admin/tracks', 'GET', { per_page: 20, page: pageIndex+1, filters: hotFilters || '' }, { Authorization: `Bearer ${token}` })
+			const [response, headers] = await customFetch('admin/tracks', 'GET', { per_page: 20, page: pageIndex + 1, filters: hotFilters || '', sorts: hotOrder || '' }, { Authorization: `Bearer ${token}` })
 			setData(response.tracks);
 			setTotal(response.total);
+			setOrder(response.order);
 			setLoading(false)
 			setPageCount(response.pages)
 		} catch (e) {
@@ -92,8 +106,8 @@ const Tracks = ({ history }) => {
 		//fetchCustomers();
 	}, [])
 
-	const fetchData = useCallback(({ pageSize, pageIndex, state, hotFilters }) => {
-		fetchTracks({ pageSize, pageIndex, state, hotFilters });
+	const fetchData = useCallback(({ pageSize, pageIndex, state, hotFilters, hotOrder }) => {
+		fetchTracks({ pageSize, pageIndex, state, hotFilters, hotOrder });
 	}, [])
 
 	const deleteRecord = async (url) => {
@@ -139,6 +153,8 @@ const Tracks = ({ history }) => {
 						total={total}
 						deleteRecord={deleteRecord}
 						handleOnInputChange={debounce(handleOnInputChange, 150)}
+						currentOrder={order}
+						sortRows={sortRows}
 						pagination={true}
 					/>
 				</Gist>

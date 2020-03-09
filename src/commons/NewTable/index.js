@@ -2,7 +2,9 @@ import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
 import { useTable, useFilters, useSortBy, usePagination, useGlobalFilter } from 'react-table'
 import { NavLink } from 'react-router-dom'
-import matchSorter from 'match-sorter'
+
+import { faSort } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 
 const Styles = styled.div`
@@ -44,6 +46,14 @@ const Styles = styled.div`
 				text-align: left
 				padding: 20px 10px;
 				color: #A3A6B4;
+				svg{
+					margin-left: 5px;
+					color: #888787;
+					cursor: pointer;
+					&:hover{
+						color: #525252;
+					}
+				}
 			},
 			td {
 				margin: 1;
@@ -151,6 +161,8 @@ export default function Table({
 	handleOnInputChange,
 	deleteRecord,
 	disableEnable,
+	currentOrder,
+	sortRows,
 	pagination,
 	pageCount: controlledPageCount,
 }) {
@@ -223,6 +235,9 @@ export default function Table({
 									{headerGroup.headers.map(column => (
 										<th {...column.getHeaderProps()}>
 											{column.render('Header')}
+											{column.sort && <FontAwesomeIcon icon={faSort} size="1x" onClick={e => {
+												sortRows(pageSize, pageIndex, state, currentOrder === 'desc' ? 'asc' : 'desc')
+											}}/>}
 											{/* Render the columns filter UI */}
 											{column.Filter && <input
 												type="text"

@@ -25,6 +25,7 @@ const Genres = ({ history }) => {
 	const [pageCount, setPageCount] = useState(0)
 	const [filters, setFilters] = useState({})
 	const [total, setTotal] = useState(0)
+	const [order, setOrder] = useState()
 
 	const columns = useMemo(
 		() => [
@@ -39,8 +40,9 @@ const Genres = ({ history }) => {
 					},
 					{
 						Header: "Created Date",
-						accessor: "purchase_time",
-						Filter: false
+						accessor: "created_at",
+						Filter: false,
+						sort: true
 					},
 					{
 						Header: "Options",
@@ -59,16 +61,23 @@ const Genres = ({ history }) => {
 		const hotFilters = filters
 		hotFilters[column] = value
 		console.log(hotFilters)
-		fetchData({ pageSize, pageIndex, state, hotFilters })
+		fetchData({ pageSize, pageIndex, state, hotFilters, order })
+	};
+
+	const sortRows = async (pageSize, pageIndex, state, value) => {
+		await setOrder(value)
+		const hotOrder = value
+		fetchData({ pageSize, pageIndex, state, filters, hotOrder })
 	};
 
 	const token = cookie.getToken()
-	const fetchGenres = async ({ pageSize, pageIndex, state, hotFilters }) => {
+	const fetchGenres = async ({ pageSize, pageIndex, state, hotFilters, hotOrder }) => {
 		try {
 			setLoading(true)
-			const [response, headers] = await customFetch('admin/genres', 'GET', { per_page: 20, page: pageIndex+1, filters: hotFilters || '' }, { Authorization: `Bearer ${token}` })
+			const [response, headers] = await customFetch('admin/genres', 'GET', { per_page: 20, page: pageIndex+1, filters: hotFilters || '', sorts: hotOrder || '' }, { Authorization: `Bearer ${token}` })
 			setData(response.genres);
 			setTotal(response.total);
+			setOrder(response.order);
 			setLoading(false)
 			setPageCount(response.pages)
 		} catch (e) {
@@ -80,8 +89,8 @@ const Genres = ({ history }) => {
 		//fetchCustomers();
 	}, [])
 
-	const fetchData = useCallback(({ pageSize, pageIndex, state, hotFilters }) => {
-		fetchGenres({ pageSize, pageIndex, state, hotFilters });
+	const fetchData = useCallback(({ pageSize, pageIndex, state, hotFilters, hotOrder }) => {
+		fetchGenres({ pageSize, pageIndex, state, hotFilters, hotOrder });
 	}, [])
 
 	const deleteRecord = async (url) => {
@@ -127,6 +136,8 @@ const Genres = ({ history }) => {
 						total={total}
 						deleteRecord={deleteRecord}
 						handleOnInputChange={debounce(handleOnInputChange, 150)}
+						currentOrder={order}
+						sortRows={sortRows}
 						pagination={true}
 					/>
 				</Gist>

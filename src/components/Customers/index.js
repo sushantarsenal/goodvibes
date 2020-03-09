@@ -25,6 +25,7 @@ const Customers = ({ history }) => {
 	const [pageCount, setPageCount] = useState(0)
 	const [filters, setFilters] = useState({})
 	const [total, setTotal] = useState(0)
+	const [order, setOrder] = useState()
 
 	const columns = useMemo(
 		() => [
@@ -36,11 +37,6 @@ const Customers = ({ history }) => {
 						accessor: "email",
 						Filter: true,
 						type: 'text'
-					},
-					{
-						Header: "Created Date",
-						accessor: "created_at",
-						Filter: false
 					},
 					{
 						Header: "Plan",
@@ -55,6 +51,12 @@ const Customers = ({ history }) => {
 						Header: "Status",
 						accessor: "status",
 						Filter: false
+					},
+					{
+						Header: "Created Date",
+						accessor: "created_at",
+						Filter: false,
+						sort: true
 					},
 					{
 						Header: "Options",
@@ -77,13 +79,20 @@ const Customers = ({ history }) => {
 		fetchData({ pageSize, pageIndex, state, hotFilters})
 	};
 
+	const sortRows = async (pageSize, pageIndex, state, value) => {
+		await setOrder(value)
+		const hotOrder = value
+		fetchData({ pageSize, pageIndex, state, filters, hotOrder })
+	};
+
 	const token = cookie.getToken()
-	const fetchCustomers = async ({ pageSize, pageIndex, state, hotFilters }) => {
+	const fetchCustomers = async ({ pageSize, pageIndex, state, hotFilters, hotOrder }) => {
 		try {
 			setLoading(true)
-			const [response] = await customFetch('admin/users', 'GET', { per_page: 20, page: pageIndex+1, filters: hotFilters || ''}, { Authorization: `Bearer ${token}` })
+			const [response] = await customFetch('admin/users', 'GET', { per_page: 20, page: pageIndex + 1, filters: hotFilters || '', sorts: hotOrder || ''}, { Authorization: `Bearer ${token}` })
 			setData(response.users);
 			setTotal(response.total);
+			setOrder(response.order);
 			setLoading(false)
 			setPageCount(response.pages)
 		} catch (e) {
@@ -95,8 +104,8 @@ const Customers = ({ history }) => {
 		//fetchCustomers();
 	}, [])
 
-	const fetchData = useCallback(({ pageSize, pageIndex, state, hotFilters }) => {
-		fetchCustomers({pageSize, pageIndex, state, hotFilters});
+	const fetchData = useCallback(({ pageSize, pageIndex, state, hotFilters, hotOrder }) => {
+		fetchCustomers({ pageSize, pageIndex, state, hotFilters, hotOrder});
 	}, [])
 
 	const deleteRecord = async (url) => {
@@ -148,6 +157,8 @@ const Customers = ({ history }) => {
 						handleOnInputChange={debounce(handleOnInputChange, 150)}
 						deleteRecord={deleteRecord}
 						disableEnable={disableEnable}
+						currentOrder={order}
+						sortRows={sortRows}
 						pagination={true}
 					/>
 				</Gist>

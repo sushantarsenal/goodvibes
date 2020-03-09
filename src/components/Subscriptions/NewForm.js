@@ -62,14 +62,18 @@ const NewForm = ({ history, initialValues, action, id, users, ...props}) => {
 					placeholder="Select..."
 					allowNewOptions
 				/>
-
-			</Row>
-			<Row>
 				<Field
 					name="subs"
 					label="Plan"
 					component={SelectField}
 					options={plans}
+				/>
+			</Row>
+			<Row>
+				<Field
+					name="expiry_date"
+					label="Expiry Date"
+					component={DateField}
 				/>
 				<Field
 					name="purchase_time"
