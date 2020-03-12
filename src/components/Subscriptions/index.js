@@ -63,6 +63,12 @@ const Subscriptions = ({ history }) => {
 						sort: true
 					},
 					{
+						Header: "Expires after",
+						accessor: "days_until_expiry",
+						Filter: false,
+						sort: true
+					},
+					{
 						Header: "Options",
 						accessor: "",
 						type: 'options',

@@ -108,6 +108,31 @@ const Customers = ({ history }) => {
 		fetchCustomers({ pageSize, pageIndex, state, hotFilters, hotOrder});
 	}, [])
 
+	const confirmEnableDisable = async (url, val) => {
+		try {
+			const desiredAction = val['disabled'] ? 'disable' : 'enable'
+			confirmAlert({
+				title: `Confirm to ${desiredAction}`,
+				message: `Are you sure, you want to ${desiredAction} this record?`,
+				buttons: [
+					{
+						label: 'Yes',
+						onClick: () => {
+							customFetch(url, 'PUT', val, { Authorization: `Bearer ${token}` })
+							window.location.reload()
+						}
+					},
+					{
+						label: 'No',
+						onClick: () => history.push('/customers')
+					}
+				]
+			});
+		} catch (e) {
+			console.log(e)
+		}
+	}
+
 	const deleteRecord = async (url) => {
 		try {
 			confirmAlert({
@@ -156,7 +181,7 @@ const Customers = ({ history }) => {
 						total={total}
 						handleOnInputChange={debounce(handleOnInputChange, 150)}
 						deleteRecord={deleteRecord}
-						disableEnable={disableEnable}
+						disableEnable={confirmEnableDisable}
 						currentOrder={order}
 						sortRows={sortRows}
 						pagination={true}

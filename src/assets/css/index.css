@@ -16,6 +16,10 @@ body {
   background: #F0F0F7;
 }
 
+.react-confirm-alert-body{
+  font-family: 'Open Sans', 'sans-serif';
+}
+
 .hidden {
   display: none;
 }
