@@ -72,6 +72,7 @@ const Subscriptions = ({ history }) => {
 						Header: "Options",
 						accessor: "",
 						type: 'options',
+						table: 'subscriptions',
 						Options: optionsLinks
 					}
 				]
@@ -127,7 +128,7 @@ const Subscriptions = ({ history }) => {
 						label: 'Yes',
 						onClick: () => {
 							customFetch(url, 'DELETE', {}, { Authorization: `Bearer ${token}` })
-							history.push('/subscriptions')
+							window.location.reload()
 						}
 					},
 					{

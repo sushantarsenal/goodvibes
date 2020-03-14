@@ -120,7 +120,7 @@ const Tracks = ({ history }) => {
 						label: 'Yes',
 						onClick: () => {
 							customFetch(url, 'DELETE', {}, { Authorization: `Bearer ${token}` })
-							history.push('/tracks')
+							window.location.reload()
 						}
 					},
 					{

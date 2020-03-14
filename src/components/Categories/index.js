@@ -66,6 +66,7 @@ const Categories = ({ history }) => {
 						Header: "Options",
 						accessor: "",
 						type: 'options',
+						table: 'categories',
 						Options: optionsLinks
 					}
 				]
@@ -122,7 +123,7 @@ const Categories = ({ history }) => {
 						label: 'Yes',
 						onClick: () => {
 							customFetch(url, 'DELETE', {}, { Authorization: `Bearer ${token}` })
-							history.push('/categories')
+							window.location.reload()
 						}
 					},
 					{

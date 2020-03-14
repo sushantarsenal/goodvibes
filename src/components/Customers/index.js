@@ -148,7 +148,7 @@ const Customers = ({ history }) => {
 						label: 'Yes',
 						onClick: () => {
 							customFetch(url, 'DELETE', {}, { Authorization: `Bearer ${token}` })
-							history.push('/customers')
+							window.location.reload()
 						}
 					},
 					{

@@ -104,7 +104,7 @@ const Genres = ({ history }) => {
 						label: 'Yes',
 						onClick: () => {
 							customFetch(url, 'DELETE', {}, { Authorization: `Bearer ${token}` })
-							history.push('/genres')
+							window.location.reload()
 						}
 					},
 					{
