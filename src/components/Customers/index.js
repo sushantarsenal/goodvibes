@@ -53,6 +53,11 @@ const Customers = ({ history }) => {
 						Filter: false
 					},
 					{
+						Header: "Device",
+						accessor: "device",
+						sort: true
+					},
+					{
 						Header: "Created Date",
 						accessor: "created_at",
 						Filter: false,
