@@ -236,7 +236,14 @@ export default function Table({
 										<th {...column.getHeaderProps()}>
 											{column.render('Header')}
 											{column.sort && <FontAwesomeIcon icon={faSort} size="1x" onClick={e => {
-												sortRows(pageSize, pageIndex, state, currentOrder === 'desc' ? 'asc' : 'desc')
+												const sortBy = column.sort_by && column.sort_by || column.id
+												let newOrder;
+												if (currentOrder[sortBy]){
+													newOrder = currentOrder[sortBy] === 'desc' ? 'asc' : 'desc'
+												}else{
+													newOrder = 'desc'
+												}
+												sortRows(pageSize, pageIndex, state, sortBy, newOrder)
 											}}/>}
 											{/* Render the columns filter UI */}
 											{column.Filter && <input

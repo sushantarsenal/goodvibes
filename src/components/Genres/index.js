@@ -25,7 +25,7 @@ const Genres = ({ history }) => {
 	const [pageCount, setPageCount] = useState(0)
 	const [filters, setFilters] = useState({})
 	const [total, setTotal] = useState(0)
-	const [order, setOrder] = useState()
+	const [order, setOrder] = useState({created_at: 'desc'})
 
 	const columns = useMemo(
 		() => [
@@ -36,7 +36,8 @@ const Genres = ({ history }) => {
 						Header: "Genre Name",
 						accessor: "name",
 						Filter: true,
-						type: 'text'
+						type: 'text',
+						sort: true
 					},
 					{
 						Header: "Created Date",
@@ -64,9 +65,9 @@ const Genres = ({ history }) => {
 		fetchData({ pageSize, pageIndex, state, hotFilters, order })
 	};
 
-	const sortRows = async (pageSize, pageIndex, state, value) => {
-		await setOrder(value)
-		const hotOrder = value
+	const sortRows = async (pageSize, pageIndex, state, sortBy, value) => {
+		const hotOrder = {[sortBy]: value}
+		await setOrder(hotOrder)
 		fetchData({ pageSize, pageIndex, state, filters, hotOrder })
 	};
 
@@ -116,7 +117,6 @@ const Genres = ({ history }) => {
 			console.log(e)
 		}
 	}
-
 
 	//if (loading) return <div>Loading...</div>
 	return (

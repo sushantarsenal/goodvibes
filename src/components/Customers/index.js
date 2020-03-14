@@ -25,7 +25,7 @@ const Customers = ({ history }) => {
 	const [pageCount, setPageCount] = useState(0)
 	const [filters, setFilters] = useState({})
 	const [total, setTotal] = useState(0)
-	const [order, setOrder] = useState()
+	const [order, setOrder] = useState({ created_at: 'desc' })
 
 	const columns = useMemo(
 		() => [
@@ -79,9 +79,9 @@ const Customers = ({ history }) => {
 		fetchData({ pageSize, pageIndex, state, hotFilters})
 	};
 
-	const sortRows = async (pageSize, pageIndex, state, value) => {
-		await setOrder(value)
-		const hotOrder = value
+	const sortRows = async (pageSize, pageIndex, state, sortBy, value) => {
+		const hotOrder = { [sortBy]: value }
+		await setOrder(hotOrder)
 		fetchData({ pageSize, pageIndex, state, filters, hotOrder })
 	};
 
