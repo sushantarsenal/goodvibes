@@ -12,8 +12,6 @@ import Breadcrumb from 'commons/Style/Breadcrumb'
 const Slider = ({ history }) => {
 	return (
 		<Container>
-			<Sidebar items={getSidebarItems()} history={history} />
-
 			<RouteWithSidebar>
 				<CustomHeader />
 				<Breadcrumb name='Slider' settings={false} />

@@ -121,7 +121,7 @@ const Genres = ({ history }) => {
 	//if (loading) return <div>Loading...</div>
 	return (
 		<Container>
-			<Sidebar items={getSidebarItems()} history={history} />
+			{/* <Sidebar items={getSidebarItems()} history={history} /> */}
 			<RouteWithSidebar>
 				<CustomHeader currentUser={currentUser} history={history} />
 				<Breadcrumb name='Genres' createNew={true} path={`/genres/new`} title='Add New Genre' />

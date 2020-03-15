@@ -170,8 +170,6 @@ const Customers = ({ history }) => {
 	//if (loading) return <div>Loading...</div>
 	return (
 		<Container>
-			<Sidebar items={getSidebarItems()} history={history} />
-
 			<RouteWithSidebar>
 				<CustomHeader currentUser={currentUser} history={history}/>
 				<Breadcrumb name='Customers' createNew={true} path={`/customers/new`} title='Add New Customer' />

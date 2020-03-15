@@ -12,8 +12,6 @@ import Breadcrumb from 'commons/Style/Breadcrumb'
 const EmailMarketings = ({ history }) => {
 	return (
 		<Container>
-			<Sidebar items={getSidebarItems()} history={history} />
-
 			<RouteWithSidebar>
 				<CustomHeader />
 				<Breadcrumb name='Email Marketings' settings={false} />

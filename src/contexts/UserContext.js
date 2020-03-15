@@ -51,7 +51,7 @@ const UserProvider = ({ history, children }) => {
     isLogin() && fetchUser()
   }, [history.location.pathname])
 
-  if (loading) return <div>Loading...</div>
+  // if (loading) return <div>Loading...</div>
 
   return (
     <UserContext.Provider

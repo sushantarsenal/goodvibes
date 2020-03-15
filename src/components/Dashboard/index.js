@@ -27,8 +27,6 @@ const Dashboard = ({ history }) => {
 	// if (loading) return <div>Loading...</div>
 	return (
 		<Container>
-			<Sidebar items={getSidebarItems()} history={history} />
-
 			<RouteWithSidebar>
 				<CustomHeader currentUser={currentUser} history={history} />
 				<Breadcrumb name='Overview' settings={false} />

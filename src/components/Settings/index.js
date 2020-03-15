@@ -25,7 +25,6 @@ const Profile = ({ history, ...props}) => {
 
 	return (
 		<Container>
-			<Sidebar items={getSidebarItems()} history={history} />
 			<RouteWithSidebar>
 				<CustomHeader />
 				<Breadcrumb name={capitalize(action)} settings={false} />

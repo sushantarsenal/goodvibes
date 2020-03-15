@@ -7,6 +7,9 @@ import { ToastContainer, Slide } from 'react-toastify'
 import Authentication from 'components/Authentication'
 import { UserProvider } from 'contexts/UserContext'
 
+import Sidebar, { RouteWithSidebar } from 'commons/Sidebar'
+import getSidebarItems from '../commons/WrapperWithSidebar/sidebarItems'
+
 import { DASHBOARD, CUSTOMERS, EMAIL_MARKETINGS, TRACKS, CATEGORIES, GENRES, SUBSCRIPTIONS, SLIDER, SETTINGS, LOGS } from 'constants/routes'
 
 import Dashboard from '../../components/Dashboard'
@@ -40,6 +43,7 @@ function App({ history }) {
         toastClassName="toast-inner-container"
         className="toast-container"
       />
+      <Sidebar items={getSidebarItems()} history={history} />
       <Switch>
         <Redirect
           exact
