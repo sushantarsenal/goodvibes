@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { reduxForm, Field } from 'redux-form'
 import { connect } from 'react-redux'
-import { TextField, FileField, SelectField, DateField } from 'commons/Forms/InputField'
+import { TextField, FileField, SelectField, DateField, TextArea } from 'commons/Forms/InputField'
 import Button from 'commons/Buttons/NormalButton'
 import validate from 'utils/validate'
 import { compose } from 'redux'
@@ -180,7 +180,7 @@ const NewForm = ({ history, initialValues, action, id, categories, imageName, mu
 				<Field
 					name="description"
 					label="Description"
-					component={TextField}
+					component={TextArea}
 				/>
 			</Row>
 			<Row>

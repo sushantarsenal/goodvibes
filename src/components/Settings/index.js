@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 
 import { last, capitalize } from 'lodash'
 import Container from 'commons/Container'
-import getSidebarItems from '../commons/WrapperWithSidebar/sidebarItems'
 import Sidebar, { RouteWithSidebar } from 'commons/Sidebar'
 import CustomHeader from 'commons/CustomHeader'
 import Gist from 'commons/Style/Gist'
@@ -16,17 +15,16 @@ import NewForm from './NewForm'
 import { UserContext } from 'contexts/UserContext'
 
 const Profile = ({ history, ...props}) => {
+	const { currentUser } = useContext(UserContext)
 	const locationPath = props.location.pathname.split('/')
 	const [loading, setLoading] = useState(false)
 	const [action] = useState(last(locationPath)),
 		[id] = useState(locationPath[locationPath.length - 2])
-	const { currentUser } = useContext(UserContext)
-	const token = cookie.getToken()
 
 	return (
 		<Container>
 			<RouteWithSidebar>
-				<CustomHeader />
+				<CustomHeader currentUser={currentUser} history={history} />
 				<Breadcrumb name={capitalize(action)} settings={false} />
 				<Gist>
 					<NewForm history={history} initialValues={currentUser} id={currentUser.id}/>

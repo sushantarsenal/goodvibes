@@ -57,6 +57,29 @@ export const InputWrapper = styled.div`
     visibility: ${props => (props.hidden ? props.hidden : false)};
     ${({ css }) => css}
   `,
+  InputArea = styled.textarea`
+    font-size: 1em;
+    color: rgba(110, 110, 110);
+    border: ${props => borderColor(props)};
+    border-radius: 6px;
+    height: 90px;
+    padding: 0 12px;
+    padding-left: ${props => props.prepend ? '22px' : '12px'};
+    width: 100%;
+    :disabled {
+      background-color: ${theme.color.background.fade};
+      cursor: not-allowed;
+    }
+    :focus {
+      outline: none;
+    }
+    ::placeholder {
+      margin-left: 10px;
+      color: rgb(217, 217, 217);
+    }
+    visibility: ${props => (props.hidden ? props.hidden : false)};
+    ${({ css }) => css}
+  `,
   Error = styled.span`
     color: red;
     font-size: 12px;

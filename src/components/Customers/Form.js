@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useContext} from 'react'
 import PropTypes from 'prop-types'
 
 import { last, capitalize } from 'lodash'
@@ -14,8 +14,10 @@ import { Form } from '../styled'
 import { getNames } from 'country-list'
 import cookie from 'utils/cookie'
 import NewForm from './NewForm'
+import { UserContext } from 'contexts/UserContext'
 
 const Profile = ({ history, ...props}) => {
+	const { currentUser } = useContext(UserContext)
 	const locationPath = props.location.pathname.split('/')
 	const [loading, setLoading] = useState(false)
 	const [action] = useState(last(locationPath)),
@@ -56,7 +58,7 @@ const Profile = ({ history, ...props}) => {
 		<Container>
 			<Sidebar items={getSidebarItems()} history={history} />
 			<RouteWithSidebar>
-				<CustomHeader />
+				<CustomHeader currentUser={currentUser} history={history} />
 				<Breadcrumb name={capitalize(action)} settings={false} />
 				<Gist>
 					<NewForm history={history} initialValues={record} action = {action} id={id}/>

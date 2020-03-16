@@ -248,11 +248,11 @@ export default function Table({
 											{/* Render the columns filter UI */}
 											{column.Filter && <input
 												type="text"
-												value={(filters && filters[column.id]) || ''}
+												value={(filters && (filters[column.searchIn] || filters[column.id]) ) || ''}
 												id="search-input"
 												placeholder="Search..."
 												onChange={e => {
-													handleOnInputChange(pageSize, pageIndex, state, e.target.value, column.id)
+													handleOnInputChange(pageSize, pageIndex, state, e.target.value, (column.searchIn && column.searchIn) || column.id)
 												}}
 											/>}
 										</th>

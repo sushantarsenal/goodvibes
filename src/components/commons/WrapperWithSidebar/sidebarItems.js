@@ -16,7 +16,7 @@ export default () => {
       id: 2, name: 'Customers', link: CUSTOMERS.INDEX, items: [], hide: false
     },
     {
-      id: 3, name: 'Email Marketing', link: EMAIL_MARKETINGS.INDEX, items: [], hide: false
+      id: 3, name: 'Email Marketing', link: EMAIL_MARKETINGS.INDEX, items: [], hide: true
     },
     {
       id: 4, name: 'Tracks', link: TRACKS.INDEX, items: [], hide: false
@@ -31,7 +31,7 @@ export default () => {
       id: 7, name: 'Subscriptions', link: SUBSCRIPTIONS.INDEX, items: [], hide: false
     },
     {
-      id: 8, name: 'Slider', link: SLIDER, items: [], hide: false
+      id: 8, name: 'Slider', link: SLIDER, items: [], hide: true
     },
     {
       id: 9, name: 'Activity Logs', link: LOGS, items: [], hide: false

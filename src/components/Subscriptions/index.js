@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useContext, useCallback, useRef } from 'react'
+import React, { useState, useMemo, useEffect, useContext, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
@@ -45,6 +45,7 @@ const Subscriptions = ({ history }) => {
 						Header: "Subscriber",
 						accessor: "user",
 						Filter: true,
+						searchIn: 'email',
 						type: 'association'
 					},
 					{
@@ -60,6 +61,12 @@ const Subscriptions = ({ history }) => {
 						Header: "Created Date",
 						accessor: "created_at",
 						Filter: false,
+						sort: true
+					},
+					{
+						Header: "Device",
+						accessor: "device",
+						Filter: true,
 						sort: true
 					},
 					{

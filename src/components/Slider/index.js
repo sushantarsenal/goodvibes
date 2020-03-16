@@ -13,7 +13,7 @@ const Slider = ({ history }) => {
 	return (
 		<Container>
 			<RouteWithSidebar>
-				<CustomHeader />
+				<CustomHeader history={history} />
 				<Breadcrumb name='Slider' settings={false} />
 				<Gist>Coming in next version.</Gist>
 			</RouteWithSidebar>

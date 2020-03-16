@@ -13,7 +13,7 @@ const EmailMarketings = ({ history }) => {
 	return (
 		<Container>
 			<RouteWithSidebar>
-				<CustomHeader />
+				<CustomHeader history={history} />
 				<Breadcrumb name='Email Marketings' settings={false} />
 				<Gist>Coming in next version.</Gist>
 			</RouteWithSidebar>

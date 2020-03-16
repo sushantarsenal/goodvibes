@@ -2,8 +2,9 @@
 * Unauthorized copying of this file, via any medium is strictly prohibited
 * Proprietary and confidential
 * Bryan Starbuck <bryan@go9.com>, October 2019
-*/          
+*/
 import TextField from './TextField'
+import TextArea from './TextArea'
 import PasswordField from './PasswordField'
 import SelectField from './SelectField'
 import DateField from './DateField'
@@ -20,4 +21,5 @@ export {
   InputAddon,
   FileField,
   AutoSuggestion,
+  TextArea
 }

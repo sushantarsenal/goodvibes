@@ -1,4 +1,4 @@
-import React, {useState, useMemo, useEffect, useContext, useCallback, useRef} from 'react'
+import React, {useState, useMemo, useEffect, useContext, useCallback} from 'react'
 import PropTypes from 'prop-types'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
@@ -6,7 +6,6 @@ import cookie from 'utils/cookie'
 import { customFetch } from 'utils'
 
 import Container from 'commons/Container'
-import getSidebarItems from '../commons/WrapperWithSidebar/sidebarItems'
 import Sidebar, { RouteWithSidebar } from 'commons/Sidebar'
 import CustomHeader from 'commons/CustomHeader'
 import Gist from 'commons/Style/Gist'

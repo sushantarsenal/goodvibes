@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useContext, useCallback, useRef } from 'react'
+import React, { useState, useMemo, useEffect, useContext, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { Route, Switch, Redirect } from 'react-router-dom'
 

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useContext} from 'react'
 import PropTypes from 'prop-types'
 
 import { last, capitalize } from 'lodash'
@@ -15,10 +15,12 @@ import { Form } from '../styled'
 import { getNames } from 'country-list'
 import cookie from 'utils/cookie'
 import NewForm from './NewForm'
+import { UserContext } from 'contexts/UserContext'
 
 const Track = ({ history, ...props}) => {
 	const locationPath = props.location.pathname.split('/')
 	const [loading, setLoading] = useState(false)
+	const { currentUser } = useContext(UserContext)
 	const [action] = useState(last(locationPath)),
 		[id] = useState(locationPath[locationPath.length - 2]),
 		[record, setRecord] = useState({ paid: false, push_notification: true, active: true}),
@@ -62,7 +64,7 @@ const Track = ({ history, ...props}) => {
 		<Container>
 			<Sidebar items={getSidebarItems()} history={history} />
 			<RouteWithSidebar>
-				<CustomHeader />
+				<CustomHeader currentUser={currentUser} history={history} />
 				<Breadcrumb name={capitalize(action)} settings={false} />
 				<Gist>
 					<NewForm history={history} initialValues={record} action={action} id={id} imageName={record.image_name} musicName={record.track_name} categories={categories}/>
