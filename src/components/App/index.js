@@ -43,7 +43,10 @@ function App({ history }) {
         toastClassName="toast-inner-container"
         className="toast-container"
       />
-      <Sidebar items={getSidebarItems()} history={history} />
+      {history.location.pathname !== "/auth/login" &&
+        < Sidebar items={getSidebarItems()} history={history} />
+      }
+
       <Switch>
         <Redirect
           exact

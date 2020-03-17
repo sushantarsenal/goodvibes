@@ -47,9 +47,10 @@ const Tracks = ({ history }) => {
 						accessor: "duration"
 					},
 					{
-						Header: "Category",
-						accessor: "category",
-						type: "association"
+						Header: "Track Code",
+						accessor: "track_code",
+						Filter: true,
+						type: 'text'
 					},
 					{
 						Header: "Artist",

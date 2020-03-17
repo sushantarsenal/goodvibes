@@ -37,7 +37,7 @@ export default () => {
       id: 9, name: 'Activity Logs', link: LOGS, items: [], hide: false
     },
     {
-      id: 10, name: 'Settings', link: SETTINGS, items: [], hide: false
+      id: 10, name: 'Settings', link: SETTINGS, items: [], hide: true
     },
 
   ]

@@ -66,7 +66,6 @@ const Subscriptions = ({ history }) => {
 					{
 						Header: "Device",
 						accessor: "device",
-						Filter: true,
 						sort: true
 					},
 					{
