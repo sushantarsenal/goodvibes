@@ -32,7 +32,7 @@ const CustomHeader = ({history}) => {
 	return (
 		<HeaderContainer>
 			<Header>
-				<Name>{currentUser.email}</Name>
+				<Name>{currentUser.full_name || currentUser.email}</Name>
 				<Dropdown
 					history={history}
 					target={() => (

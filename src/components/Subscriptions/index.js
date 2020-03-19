@@ -31,8 +31,6 @@ const Subscriptions = ({ history }) => {
 	const optionsLinks = () => {
 		return (<>
 			<span>Edit</span>
-			<span> | </span>
-			<span>Delete</span>
 		</>)
 	}
 
@@ -79,7 +77,7 @@ const Subscriptions = ({ history }) => {
 						accessor: "",
 						type: 'options',
 						table: 'subscriptions',
-						Options: optionsLinks
+						delete: false
 					}
 				]
 			}

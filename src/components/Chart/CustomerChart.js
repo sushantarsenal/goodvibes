@@ -1,41 +1,63 @@
 import React, { useState, useMemo, useEffect, useContext, useCallback, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { Route, Switch, Redirect } from 'react-router-dom'
 
 import theme from 'constants/theme'
 import cookie from 'utils/cookie'
 import { isLogin, customFetch } from 'utils'
 import styled from 'styled-components'
+import { keys, values } from 'lodash'
 
 import { Bar } from 'react-chartjs-2';
-// import Legend from '../Home/commons/Legend/index'
-// import LineChart from '../Home/commons/LineChart/index'
 
-const chartData = {
-	labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-	datasets: [
-		{
-			label: 'Customer Growth',
-			backgroundColor: '#a3a1fb87',
-			borderColor: '#a3a1fbb8',
-			borderWidth: 1,
-			hoverBackgroundColor: '#a3a1fbc7',
-			hoverBorderColor: '#a3a1fbdb',
-			data: [65, 59, 80, 81, 56, 55, 40, 12, 5, 26, 108, 66]
-		}
-	]
-};
+
 
 const CustomerChart = ({ history, title }) => {
-	const [data, setData] = useState([])
-	const [loading, setLoading] = useState(false)
+	const [data, setData] = useState(),
+		[loading, setLoading] = useState(false)
+	let chartData;
+
+	const staticData = {
+		ios: { "2019 February": 14, "2019 March": 12, "2019 April": 24, "2019 May": 55, "2019 June": 13, "2019 July": 85, "2019 August": 25, "2019 September": 67, "2019 October": 27, "2019 November": 39, "2019 December": 204, "2019 January": 69 },
+		android: { "2019 February": 34, "2019 March": 12, "2019 April": 24, "2019 May": 55, "2019 June": 2, "2019 July": 114, "2019 August": 25, "2019 September": 84, "2019 October": 78, "2019 November": 14, "2019 December": 54, "2019 January": 9 }
+	}
+
+	if(true){
+		const months = keys(staticData['ios'])
+		const iosValues = values(staticData['ios'])
+		const androidValues = values(staticData['android'])
+
+		chartData = {
+			labels: months,
+			datasets: [
+				{
+					label: 'Android Customers',
+					backgroundColor: '#a3a1fb87',
+					borderColor: '#a3a1fbb8',
+					borderWidth: 1,
+					hoverBackgroundColor: '#a3a1fbc7',
+					hoverBorderColor: '#a3a1fbdb',
+					data: androidValues
+				},
+				{
+					label: 'iOS Customers',
+					backgroundColor: '#ffd1cc',
+					borderColor: '#f9cbc7',
+					borderWidth: 1,
+					hoverBackgroundColor: '#f9cbc7',
+					hoverBorderColor: '#f9cbc7',
+					data: iosValues
+				}
+			]
+		};
+	}
+
 
 	const token = cookie.getToken()
 	const fetchLogs = async () => {
 		try {
 			setLoading(true)
-			const [response, headers] = await customFetch('admin/tracks', 'GET', { per_page: 10, page: 1, filters: '' }, { Authorization: `Bearer ${token}` })
-			setData(response.tracks);
+			const [response, headers] = await customFetch('admin/users/customers_growth', 'GET', { per_page: 10, page: 1, filters: '' }, { Authorization: `Bearer ${token}` })
+			await setData(response.growth);
 			setLoading(false)
 		} catch (e) {
 			console.log(e);
@@ -47,18 +69,18 @@ const CustomerChart = ({ history, title }) => {
 	}, [])
 
 	useEffect(() => {
-		fetchData()
+		// fetchData()
 		// updateLoadingState(false)
 	}, [history.location.pathname])
 
-	// if (loading) return <div>Loading...</div>
+	if (!chartData) return <div>Loading...</div>
 	return (
-		<div style={{ width: '55.5%', background: '#fff', padding: '15px 20px' }}>
+		<div style={{ width: '55.5%', background: '#fff', padding: '15px 20px', overflowY: 'scroll' }}>
 			<Title>{title}</Title>
 			<Bar
 				data={chartData}
 				width={100}
-				height={80}
+				height={70}
 				options={{
 					maintainAspectRatio: true
 				}}

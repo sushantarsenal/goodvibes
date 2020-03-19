@@ -286,11 +286,15 @@ export default function Table({
 													<span> | </span>
 													</>}
 												<Link to={{ pathname: `/${cell.column.parent.Header}/${cell.row.original.id}/edit`, record: {...cell.row.original} }}>Edit</Link>
-													{/* <Link to={`/customers/${cell.row.original.id}/edit`} style={{ color: 'blue' }} record={'haha'}>Edit</Link> */}
-													<span> | </span>
-												<CustomLink style={{ color: 'red' }} onClick={e => {
-													deleteRecord(`admin/${cell.column.table}/${cell.row.original.id}`)
-													}}>Delete</CustomLink>
+
+												{ cell.column.parent.Header  !== 'Subscriptions' &&
+														<>
+															<span> | </span>
+															<CustomLink style={{ color: 'red' }} onClick={e => {
+																deleteRecord(`admin/${cell.column.table}/${cell.row.original.id}`)
+															}}>Delete</CustomLink>
+														</>
+													}
 												</td>
 											)
 										}
